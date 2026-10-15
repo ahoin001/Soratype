@@ -1,0 +1,117 @@
+public enum AlignmentPathMatcher {
+    public static func match(_ request: DecodeRequest) -> DecodeResult {
+        let aimed = AimedSpelling.text(from: request.observations)
+        guard !request.observations.isEmpty else {
+            return DecodeResult(readings: [], aimed: "", unsure: false, budgetExhausted: false)
+        }
+        let deadline = ContinuousClock().now.advanced(by: .milliseconds(request.budgetMilliseconds))
+        let bothThumbs = request.observations.contains { $0.thumb == .left }
+            && request.observations.contains { $0.thumb == .right }
+        let searched = bothThumbs
+            ? ChainBeam.search(
+                observations: request.observations,
+                lexicon: request.lexicon,
+                costs: request.costs,
+                deadline: deadline
+            )
+            : BeamSearch.search(
+                observations: request.observations,
+                lexicon: request.lexicon,
+                costs: request.costs,
+                deadline: deadline
+            )
+        var pool = searched.candidates
+        if ContinuousClock().now < deadline {
+            pool += ShapeRescue.nominate(
+                observations: request.observations,
+                lexicon: request.lexicon,
+                centers: request.centers,
+                costs: request.costs
+            )
+        }
+        var readings = decorate(pool, request: request, aimed: aimed)
+        let needsRecovery = readings.isEmpty
+            || readings[0].score <= request.costs.weakScore
+            || (readings.count > 1 && abs(readings[0].score - readings[1].score) <= 0.05)
+        if needsRecovery, ContinuousClock().now < deadline {
+            let edits = RecoveryPass.edits(
+                observations: request.observations,
+                lexicon: request.lexicon,
+                centers: request.centers,
+                costs: request.costs
+            )
+            readings = decorate(pool + edits, request: request, aimed: aimed)
+        }
+        if readings.isEmpty {
+            return DecodeResult.aimedOnly(aimed, exhausted: searched.exhausted || ContinuousClock().now >= deadline)
+        }
+        readings = preferAimed(readings, aimed: aimed, request: request)
+        readings = applyRejection(readings, aimed: aimed, request: request)
+        let unsure = readings.count > 1 && abs(readings[0].score - readings[1].score) <= request.costs.unsureMargin
+        return DecodeResult(
+            readings: Array(readings.prefix(8)),
+            aimed: aimed,
+            unsure: unsure,
+            budgetExhausted: searched.exhausted && pool.isEmpty
+        )
+    }
+
+    private static func decorate(_ candidates: [SearchCandidate], request: DecodeRequest, aimed: String) -> [Reading] {
+        var best: [String: Reading] = [:]
+        for candidate in candidates {
+            let key = candidate.lowercase
+            if request.learning.blocked.contains(key) { continue }
+            let known = request.lexicon.contains(key) || (request.learning.personal[key] ?? 0) >= 3
+            guard known else { continue }
+            var score = candidate.score
+            score += min(request.costs.habitCap, request.learning.habits[key] ?? 0)
+            if let previous = request.previousWord?.lowercased() {
+                score += request.learning.pairs["\(previous)\t\(key)"] ?? 0
+            }
+            score += request.learning.prototypes[key] ?? 0
+            let reading = Reading(text: candidate.display, score: score, aimed: key == aimed.lowercased())
+            if let existing = best[key], existing.score >= reading.score { continue }
+            best[key] = reading
+        }
+        return Array(best.values).sorted { lhs, rhs in
+            if lhs.score == rhs.score { return lhs.text < rhs.text }
+            return lhs.score > rhs.score
+        }
+    }
+
+    private static func preferAimed(_ readings: [Reading], aimed: String, request: DecodeRequest) -> [Reading] {
+        let key = aimed.lowercased()
+        guard request.lexicon.contains(key) || (request.learning.personal[key] ?? 0) >= 3 else {
+            return readings
+        }
+        var readings = readings
+        let existing = readings.first { $0.text.lowercased() == key }
+        let aimedScore = existing?.score ?? 0
+        guard let best = readings.first else {
+            return [Reading(text: aimed, score: aimedScore, aimed: true)]
+        }
+        guard best.text.lowercased() != key, best.score - aimedScore <= request.costs.aimedMargin else {
+            return readings
+        }
+        if let index = readings.firstIndex(where: { $0.text.lowercased() == key }) {
+            let chosen = readings.remove(at: index)
+            readings.insert(Reading(text: chosen.text, score: chosen.score, aimed: true), at: 0)
+        } else {
+            readings.insert(Reading(text: aimed, score: aimedScore, aimed: true), at: 0)
+        }
+        return readings
+    }
+
+    private static func applyRejection(_ readings: [Reading], aimed: String, request: DecodeRequest) -> [Reading] {
+        guard let insisted = request.learning.rejections[aimed.lowercased()] else { return readings }
+        var readings = readings
+        if let index = readings.firstIndex(where: { $0.text.lowercased() == insisted }) {
+            let chosen = readings.remove(at: index)
+            readings.insert(chosen, at: 0)
+            return readings
+        }
+        guard request.lexicon.contains(insisted) else { return readings }
+        readings.insert(Reading(text: insisted, score: (readings.first?.score ?? 0) + 0.1, aimed: false), at: 0)
+        return readings
+    }
+}
