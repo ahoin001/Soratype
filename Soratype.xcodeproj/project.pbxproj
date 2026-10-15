@@ -43,18 +43,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A10000000000000000000008 /* Exceptions for "App" folder in "Soratype" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Soratype.entitlements,
-			);
-			target = A10000000000000000000002 /* Soratype */;
-		};
 		A10000000000000000000009 /* Exceptions for "Extension" folder in "SoratypeKeyboard" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				Keyboard.entitlements,
 			);
 			target = A10000000000000000000003 /* SoratypeKeyboard */;
 		};
@@ -63,9 +55,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A10000000000000000000006 /* App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A10000000000000000000008 /* Exceptions for "App" folder in "Soratype" target */,
-			);
 			path = App;
 			sourceTree = "<group>";
 		};
@@ -191,6 +180,7 @@
 				A10000000000000000000015 /* XCLocalSwiftPackageReference "Packages/SoratypeEngine" */,
 				A10000000000000000000016 /* XCLocalSwiftPackageReference "Packages/SoratypeLexiconBuilder" */,
 			);
+			preferredProjectObjectVersion = 77;
 			productRefGroup = A1000000000000000000000B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -255,7 +245,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -274,7 +264,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -288,6 +278,7 @@
 				CODE_SIGN_ENTITLEMENTS = App/Soratype.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6QX9FJK8N4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Soratype;
@@ -317,6 +308,7 @@
 				CODE_SIGN_ENTITLEMENTS = App/Soratype.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6QX9FJK8N4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Soratype;
@@ -347,6 +339,7 @@
 				CODE_SIGN_ENTITLEMENTS = Extension/Keyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6QX9FJK8N4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Soratype;
@@ -374,6 +367,7 @@
 				CODE_SIGN_ENTITLEMENTS = Extension/Keyboard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6QX9FJK8N4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Soratype;

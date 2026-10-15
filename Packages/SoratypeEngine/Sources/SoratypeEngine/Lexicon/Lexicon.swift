@@ -12,6 +12,8 @@ public protocol Lexicon: Sendable {
     func child(_ node: LexiconNode, _ byte: UInt8) -> LexiconNode?
     func rank(_ node: LexiconNode) -> UInt16
     func endpoints(first: UInt8, last: UInt8) -> [String]
+    func isOffensive(_ word: String) -> Bool
+    func followers(of word: String) -> [String]
 }
 
 extension Lexicon {
@@ -28,6 +30,10 @@ extension Lexicon {
         let value = rank(node)
         return value == 0 ? nil : value
     }
+
+    public func isOffensive(_ word: String) -> Bool { false }
+
+    public func followers(of word: String) -> [String] { [] }
 
     public func isPrefix(_ word: String) -> Bool {
         var node = root

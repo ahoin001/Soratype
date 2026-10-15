@@ -99,7 +99,8 @@ public struct DecodeCosts: Sendable, Equatable {
     public func countsTowardBudget(_ observation: Observation) -> Bool {
         switch observation.kind {
         case .rest, .slip: false
-        case .anchor, .tap, .crossing, .pin: true
+        case .crossing: observation.centered
+        case .anchor, .tap, .pin: true
         }
     }
 }

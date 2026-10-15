@@ -5,4 +5,6 @@ public enum EngineInput: Sendable, Equatable {
     case host(HostEvent)
     case promoteChip(Int)
     case acceptChip(Int)
+    case rejectChip(Int)
+    case suppressLiftDelete
 }

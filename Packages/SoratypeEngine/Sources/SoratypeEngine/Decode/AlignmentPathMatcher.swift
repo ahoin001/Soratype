@@ -47,6 +47,7 @@ public enum AlignmentPathMatcher {
         }
         readings = preferAimed(readings, aimed: aimed, request: request)
         readings = applyRejection(readings, aimed: aimed, request: request)
+        readings = leadingTapSkip(readings, request: request, aimed: aimed)
         let unsure = readings.count > 1 && abs(readings[0].score - readings[1].score) <= request.costs.unsureMargin
         return DecodeResult(
             readings: Array(readings.prefix(8)),
@@ -61,12 +62,20 @@ public enum AlignmentPathMatcher {
         for candidate in candidates {
             let key = candidate.lowercase
             if request.learning.blocked.contains(key) { continue }
-            let known = request.lexicon.contains(key) || (request.learning.personal[key] ?? 0) >= 3
-            guard known else { continue }
+            let aimedHit = key == aimed.lowercased()
+            if request.lexicon.isOffensive(key), !aimedHit { continue }
+            let uses = request.learning.personal[key] ?? 0
+            let known = request.lexicon.contains(key) || uses >= 3
+            guard known || uses >= 2 else { continue }
             var score = candidate.score
             score += min(request.costs.habitCap, request.learning.habits[key] ?? 0)
             if let previous = request.previousWord?.lowercased() {
-                score += request.learning.pairs["\(previous)\t\(key)"] ?? 0
+                let learned = request.learning.pairs["\(previous)\t\(key)"] ?? 0
+                if learned != 0 {
+                    score += learned
+                } else if request.lexicon.followers(of: previous).contains(key) {
+                    score += request.costs.pairBonus
+                }
             }
             score += request.learning.prototypes[key] ?? 0
             let reading = Reading(text: candidate.display, score: score, aimed: key == aimed.lowercased())
@@ -112,6 +121,30 @@ public enum AlignmentPathMatcher {
         }
         guard request.lexicon.contains(insisted) else { return readings }
         readings.insert(Reading(text: insisted, score: (readings.first?.score ?? 0) + 0.1, aimed: false), at: 0)
+        return readings
+    }
+
+    /// A stray first tap must not hide a confident stroke word. Both readings stay.
+    private static func leadingTapSkip(_ readings: [Reading], request: DecodeRequest, aimed: String) -> [Reading] {
+        let observations = request.observations
+        guard let first = observations.first, first.kind == .tap, first.stroke == 0 else { return readings }
+        let rest = observations.dropFirst()
+        guard !rest.isEmpty, rest.allSatisfy({ $0.stroke != 0 }) else { return readings }
+        let strokeWord = AimedSpelling.text(from: Array(rest))
+        let key = strokeWord.lowercased()
+        guard request.lexicon.contains(key), !request.lexicon.isOffensive(key) else { return readings }
+        let joinedIsWord = request.lexicon.contains(aimed.lowercased())
+        guard !joinedIsWord else { return readings }
+        var readings = readings
+        if let index = readings.firstIndex(where: { $0.text.lowercased() == key }) {
+            let chosen = readings.remove(at: index)
+            readings.insert(Reading(text: chosen.text, score: max(chosen.score, 0.2), aimed: false), at: 0)
+        } else {
+            readings.insert(Reading(text: strokeWord, score: 0.2, aimed: false), at: 0)
+        }
+        if !aimed.isEmpty, !readings.contains(where: { $0.text.lowercased() == aimed.lowercased() }) {
+            readings.append(Reading(text: aimed, score: -4, aimed: true))
+        }
         return readings
     }
 }

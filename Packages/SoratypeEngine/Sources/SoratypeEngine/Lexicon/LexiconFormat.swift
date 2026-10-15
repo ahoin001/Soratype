@@ -15,7 +15,9 @@ public enum LexiconFormat {
     public static let headerBytes = 64
     public static let nodeBytes = 16
     public static let endpointBytes = 32
-    public static let version: UInt16 = 1
+    public static let version: UInt16 = 2
+    public static let wordFlag: UInt8 = 1
+    public static let offensiveFlag: UInt8 = 2
 
     public struct Header: Sendable, Equatable {
         public var wordCount: Int
@@ -23,6 +25,8 @@ public enum LexiconFormat {
         public var nodesOffset: Int
         public var endpointOffset: Int
         public var endpointCount: Int
+        public var followersOffset: Int
+        public var followerCount: Int
     }
 
     public static func header(in data: Data) -> Header? {
@@ -34,7 +38,9 @@ public enum LexiconFormat {
             nodeCount: Int(readUInt32(data, 16)),
             nodesOffset: Int(readUInt32(data, 20)),
             endpointOffset: Int(readUInt32(data, 24)),
-            endpointCount: Int(readUInt32(data, 28))
+            endpointCount: Int(readUInt32(data, 28)),
+            followersOffset: Int(readUInt32(data, 32)),
+            followerCount: Int(readUInt32(data, 36))
         )
     }
 

@@ -1,0 +1,33 @@
+{
+  "": {
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/master.swiftdeps"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/BoundaryTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/BoundaryTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/BoundaryTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/BoundaryTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/BoundaryTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/BoundaryTests.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/DecoderTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/DecoderTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/DecoderTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/DecoderTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/DecoderTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/DecoderTests.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/Script.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/WorkedExampleTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/WorkedExampleTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/WorkedExampleTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/WorkedExampleTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/WorkedExampleTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/WorkedExampleTests.dia"
+  }
+}

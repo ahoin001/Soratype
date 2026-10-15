@@ -27,15 +27,47 @@ struct Script {
     }
 
     mutating func swipe(_ letters: String, finger: Int = 1) {
+        glide(letters, finger: finger, samplePath: false)
+    }
+
+    /// Draws the stroke through the keys a straight thumb path actually enters.
+    mutating func swipe(along letters: String, finger: Int = 1) {
+        glide(letters, finger: finger, samplePath: true)
+    }
+
+    private mutating func glide(_ letters: String, finger: Int, samplePath: Bool) {
         let characters = Array(letters)
         guard let first = characters.first else { return }
         down(first, finger: finger)
+        var previous = first
         for character in characters.dropFirst() {
+            if samplePath {
+                trace(from: previous, to: character, finger: finger)
+            }
             wait(16)
             move(character, finger: finger)
+            previous = character
         }
         wait(16)
         up(finger)
+    }
+
+    mutating func trace(from start: Character, to end: Character, finger: Int) {
+        guard
+            let origin = layout.key(for: start)?.frame.center,
+            let target = layout.key(for: end)?.frame.center
+        else { return }
+        let distance = origin.distance(to: target)
+        let steps = max(Int(distance / 4), 1)
+        for step in 1..<steps {
+            let t = Double(step) / Double(steps)
+            let point = Point(
+                x: origin.x + (target.x - origin.x) * t,
+                y: origin.y + (target.y - origin.y) * t
+            )
+            send(.move, key: layout.key(at: point), finger: finger, point: point)
+            wait(4)
+        }
     }
 
     mutating func down(_ character: Character, finger: Int) {
@@ -116,6 +148,6 @@ enum Fixture {
         "the", "to", "and", "you", "that", "love", "for", "with", "this", "have",
         "hey", "howdy", "stay", "quit", "private", "friend", "wait", "pill", "pile",
         "intense", "estranged", "walking", "walk", "don't", "then", "live", "cat",
-        "hello", "how", "what", "sat",
+        "hello", "how", "what", "sat", "meaning",
     ]
 }

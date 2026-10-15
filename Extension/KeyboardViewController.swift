@@ -17,8 +17,9 @@ final class KeyboardViewController: UIInputViewController {
     private var decodeTask: Task<Void, Never>?
     private var graceToken = 0
     private var graceTask: Task<Void, Never>?
-    private var suppressHostUntil = Date.distantPast
     private var started = Date()
+    private let impact = UIImpactFeedbackGenerator(style: .light)
+    private var repeatTasks: [ObjectIdentifier: Task<Void, Never>] = [:]
 
     init() {
         let layout = KeyboardLayout.letters(fitting: Size(width: 390, height: 220))
@@ -37,9 +38,9 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = KeyboardChrome.paper
+        view.backgroundColor = KeyboardChrome.air
         overrideUserInterfaceStyle = .light
-        let height = view.heightAnchor.constraint(equalToConstant: 292)
+        let height = view.heightAnchor.constraint(equalToConstant: KeyboardChrome.boardHeight)
         height.priority = UILayoutPriority(999)
         height.isActive = true
         heightConstraint = height
@@ -73,10 +74,16 @@ final class KeyboardViewController: UIInputViewController {
         ])
         suggestions = strip
         surface = keys
+        keys.showsNextKeyboard = needsInputModeSwitchKey
+        impact.prepare()
+        strip.onReject = { [weak self] index in
+            self?.forward(.rejectChip(index))
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        installedSurface().showsNextKeyboard = needsInputModeSwitchKey
         reloadResources()
         syncHost()
     }
@@ -84,6 +91,8 @@ final class KeyboardViewController: UIInputViewController {
     override func viewWillDisappear(_ animated: Bool) {
         decodeTask?.cancel()
         graceTask?.cancel()
+        for task in repeatTasks.values { task.cancel() }
+        repeatTasks.removeAll()
         queued.removeAll(keepingCapacity: true)
         decodeInFlight = false
         forward(.host(.dismiss))
@@ -94,12 +103,12 @@ final class KeyboardViewController: UIInputViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         let compact = traitCollection.verticalSizeClass == .compact
-        heightConstraint?.constant = compact ? 216 : 292
+        heightConstraint?.constant = compact ? KeyboardChrome.compactBoardHeight : KeyboardChrome.boardHeight
+        surface?.showsNextKeyboard = needsInputModeSwitchKey
     }
 
     override func textDidChange(_ textInput: UITextInput?) {
         super.textDidChange(textInput)
-        guard Date() > suppressHostUntil else { return }
         syncHost()
     }
 
@@ -131,7 +140,16 @@ final class KeyboardViewController: UIInputViewController {
     private func syncHost() {
         let before = textDocumentProxy.documentContextBeforeInput ?? ""
         let after = textDocumentProxy.documentContextAfterInput ?? ""
-        forward(.host(.textChanged(before + after, caret: before.count)))
+        if engine.field.matchesHostContext(before: before, after: after) { return }
+        let host = before + after
+        if host == engine.field.text {
+            let delta = before.count - engine.field.caret
+            if delta != 0 {
+                forward(.boundary(.caret(delta)))
+            }
+            return
+        }
+        forward(.host(.textChanged(host, caret: before.count)))
     }
 
     private func route(_ phase: TouchPhase, _ touches: Set<UITouch>) {
@@ -148,13 +166,36 @@ final class KeyboardViewController: UIInputViewController {
                 var track = FingerTrack(id: nextFinger)
                 nextFinger += 1
                 track.keyID = key?.id
+                track.origin = point
+                track.backspace = key?.kind == .backspace
                 track.points.append(point)
                 fingers[identity] = track
+                if let key, case .letter = key.kind {
+                    surface.showPopup(for: key)
+                    impact.impactOccurred(intensity: 0.55)
+                    impact.prepare()
+                }
+                if track.backspace {
+                    armBackspace(identity)
+                }
                 send(phase, finger: track.id, point: point, key: key)
             case .move:
                 guard var track = fingers[identity] else { continue }
                 if track.points.count < 64 {
                     track.points.append(point)
+                }
+                if track.backspace {
+                    let steps = Int(((point.x - track.origin.x) / 11).rounded(.towardZero))
+                    let delta = steps - track.scrubSteps
+                    if delta != 0 {
+                        track.scrubSteps = steps
+                        track.repeated = true
+                        repeatTasks[identity]?.cancel()
+                        forward(.boundary(.scrub(delta)))
+                    }
+                }
+                if isStroke(track.points) {
+                    surface.hidePopup()
                 }
                 let key = surface.key(at: point)
                 if key?.id != track.keyID {
@@ -173,12 +214,42 @@ final class KeyboardViewController: UIInputViewController {
                 if let keyID = track.keyID {
                     surface.setPressed(keyID, pressed: false)
                 }
+                surface.hidePopup()
+                repeatTasks[identity]?.cancel()
+                repeatTasks.removeValue(forKey: identity)
                 let key = surface.key(at: point)
+                if track.repeated {
+                    forward(.suppressLiftDelete)
+                }
                 send(phase, finger: track.id, point: point, key: key)
+                if phase == .up, key?.kind == .nextKeyboard, !isStroke(track.points) {
+                    advanceToNextInputMode()
+                }
             }
         }
         let strokes = fingers.values.map(\.points).filter(isStroke)
         surface.setTrails(strokes)
+    }
+
+    private func armBackspace(_ identity: ObjectIdentifier) {
+        repeatTasks[identity]?.cancel()
+        repeatTasks[identity] = Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(450))
+            guard !Task.isCancelled else { return }
+            self?.repeatBackspace(identity)
+        }
+    }
+
+    private func repeatBackspace(_ identity: ObjectIdentifier) {
+        guard var track = fingers[identity], !track.repeated || track.scrubSteps == 0 else { return }
+        track.repeated = true
+        fingers[identity] = track
+        forward(.boundary(.backspace))
+        repeatTasks[identity] = Task { [weak self] in
+            try? await Task.sleep(for: .milliseconds(120))
+            guard !Task.isCancelled else { return }
+            self?.repeatBackspace(identity)
+        }
     }
 
     private func isStroke(_ points: [CGPoint]) -> Bool {
@@ -226,12 +297,13 @@ final class KeyboardViewController: UIInputViewController {
                 suggestions.show(strip)
             case .page(let page):
                 surface.show(page: page)
+            case .shift(let state):
+                surface.setShift(state)
             default:
                 document.append(effect)
             }
         }
         guard !document.isEmpty else { return }
-        suppressHostUntil = Date().addingTimeInterval(0.05)
         ProxyBridge.apply(document, proxy: textDocumentProxy)
     }
 
@@ -321,6 +393,10 @@ private struct FingerTrack {
     var id: Int
     var keyID: String?
     var points: [CGPoint] = []
+    var origin = CGPoint.zero
+    var scrubSteps = 0
+    var repeated = false
+    var backspace = false
 
     init(id: Int) {
         self.id = id

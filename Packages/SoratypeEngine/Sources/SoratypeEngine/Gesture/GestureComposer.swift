@@ -16,7 +16,10 @@ public struct GestureComposer: Sendable {
                 observation.kind = .slip
             }
             if observation.stroke != 0,
-               let index = draft.lastIndex(where: { $0.stroke == observation.stroke && $0.letter == observation.letter && $0.thumb == observation.thumb }) {
+               let index = draft.lastIndex(where: {
+                   $0.stroke == observation.stroke && $0.letter == observation.letter && $0.thumb == observation.thumb
+               }),
+               !draft[index...].dropFirst().contains(where: { $0.stroke == observation.stroke }) {
                 draft[index] = observation
                 continue
             }

@@ -23,38 +23,61 @@ public struct KeyboardLayout: Sendable, Equatable {
         self.keyHeight = keyHeight
     }
 
-    public static func letters(fitting size: Size) -> KeyboardLayout {
+    public static func letters(fitting size: Size, showsNextKeyboard: Bool = true) -> KeyboardLayout {
         place(
             page: .letters,
             rows: [
                 letters("qwertyuiop"),
                 letters("asdfghjkl"),
-                letters("zxcvbnm"),
-                [
-                    .init("shift", .shift, "⇧", 1.5),
-                    .init("symbols", .symbols, "123", 1.4),
-                    .init("space", .space, "space", 4.2),
+                [.init("shift", .shift, "⇧", 1.5)] + letters("zxcvbnm") + [
                     .init("backspace", .backspace, "⌫", 1.5),
-                    .init("return", .return, "return", 1.8),
                 ],
+                bottomRow(
+                    leading: [.init("symbols", .symbols, "123", 1.4)],
+                    showsNextKeyboard: showsNextKeyboard,
+                    extra: [
+                        .init("comma", .punctuation(","), ",", 1),
+                        .init("space", .space, "space", 1, flexible: true),
+                        .init("period", .punctuation("."), ".", 1),
+                    ],
+                    trailing: [.init("return", .return, "⏎", 1.5)]
+                ),
             ],
             fitting: size
         )
     }
 
-    public static func numbers(fitting size: Size) -> KeyboardLayout {
+    public static func numbers(fitting size: Size, showsNextKeyboard: Bool = true) -> KeyboardLayout {
         place(
             page: .numbers,
             rows: [
                 characters("1234567890", digit: true),
                 characters("-/:;()$&@\""),
-                characters(".,?!'"),
-                [
-                    .init("letters", .letters, "ABC", 1.6),
-                    .init("space", .space, "space", 4.4),
-                    .init("backspace", .backspace, "⌫", 1.5),
-                    .init("return", .return, "return", 1.8),
-                ],
+                characters(".,?!'") + [.init("backspace", .backspace, "⌫", 1.5)],
+                bottomRow(
+                    leading: [.init("letters", .letters, "ABC", 1.6)],
+                    showsNextKeyboard: showsNextKeyboard,
+                    extra: [.init("space", .space, "space", 1, flexible: true)],
+                    trailing: [.init("return", .return, "⏎", 1.5)]
+                ),
+            ],
+            fitting: size
+        )
+    }
+
+    public static func punctuation(fitting size: Size, showsNextKeyboard: Bool = true) -> KeyboardLayout {
+        place(
+            page: .punctuation,
+            rows: [
+                characters(".,?!'\"-"),
+                characters(":;()@/&"),
+                characters("#+=*%"),
+                bottomRow(
+                    leading: [.init("letters", .letters, "ABC", 1.6)],
+                    showsNextKeyboard: showsNextKeyboard,
+                    extra: [.init("space", .space, "space", 1, flexible: true)],
+                    trailing: [.init("return", .return, "⏎", 1.5)]
+                ),
             ],
             fitting: size
         )
@@ -102,12 +125,14 @@ public struct KeyboardLayout: Sendable, Equatable {
         var kind: KeyKind
         var label: String
         var units: Double
+        var flexible: Bool
 
-        init(_ id: String, _ kind: KeyKind, _ label: String, _ units: Double) {
+        init(_ id: String, _ kind: KeyKind, _ label: String, _ units: Double, flexible: Bool = false) {
             self.id = id
             self.kind = kind
             self.label = label
             self.units = units
+            self.flexible = flexible
         }
     }
 
@@ -124,6 +149,21 @@ public struct KeyboardLayout: Sendable, Equatable {
         }
     }
 
+    private static func bottomRow(
+        leading: [Spec],
+        showsNextKeyboard: Bool,
+        extra: [Spec],
+        trailing: [Spec]
+    ) -> [Spec] {
+        var row = leading
+        if showsNextKeyboard {
+            row.append(Spec("nextKeyboard", .nextKeyboard, "Next keyboard", 1.2))
+        }
+        row.append(contentsOf: extra)
+        row.append(contentsOf: trailing)
+        return row
+    }
+
     private static func place(page: KeyboardPage, rows: [[Spec]], fitting size: Size) -> KeyboardLayout {
         let gap = 6.0
         let rowHeight = (size.height - gap * Double(rows.count + 1)) / Double(rows.count)
@@ -132,11 +172,24 @@ public struct KeyboardLayout: Sendable, Equatable {
         var placed: [PlacedKey] = []
         for (rowIndex, row) in rows.enumerated() {
             let y = gap + Double(rowIndex) * (rowHeight + gap)
-            let units = row.reduce(0) { $0 + $1.units }
-            let rowWidth = units * keyWidth + gap * Double(row.count - 1)
-            var x = max(gap, (size.width - rowWidth) / 2)
-            for spec in row {
-                let width = spec.units * keyWidth + gap * (spec.units - 1)
+            let stagger = page == .letters && rowIndex == 1
+            let inset = stagger ? gap + (keyWidth + gap) / 2 : gap
+            let available = size.width - inset - gap
+            let gaps = gap * Double(max(row.count - 1, 0))
+            let fixed = row.reduce(0.0) { total, spec in
+                spec.flexible ? total : total + width(for: spec, keyWidth: keyWidth, gap: gap)
+            }
+            let leftover = max(0, available - fixed - gaps)
+            let flexibleCount = row.filter(\.flexible).count
+            var x = inset
+            for (specIndex, spec) in row.enumerated() {
+                if flexibleCount == 0, specIndex == row.count - 1 {
+                    x += leftover
+                }
+                var width = width(for: spec, keyWidth: keyWidth, gap: gap)
+                if spec.flexible {
+                    width += leftover / Double(max(flexibleCount, 1))
+                }
                 placed.append(PlacedKey(
                     id: spec.id,
                     kind: spec.kind,
@@ -154,5 +207,9 @@ public struct KeyboardLayout: Sendable, Equatable {
             keyWidth: keyWidth,
             keyHeight: rowHeight
         )
+    }
+
+    private static func width(for spec: Spec, keyWidth: Double, gap: Double) -> Double {
+        spec.units * keyWidth + gap * (spec.units - 1)
     }
 }

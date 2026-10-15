@@ -22,6 +22,9 @@ enum LexiconInstaller {
         guard let resource = Bundle.main.url(forResource: "english", withExtension: "txt") else {
             return LexiconStatus(wordCount: 0, byteCount: 0, note: "The English word list is missing from the app.")
         }
+        let curated = bundled("curated")
+        let offensive = bundled("offensive")
+        let followers = bundled("followers")
         guard let url = SharedFiles.lexiconURL() else {
             return LexiconStatus(
                 wordCount: 0,
@@ -31,7 +34,7 @@ enum LexiconInstaller {
         }
         do {
             let text = try String(contentsOf: resource, encoding: .utf8)
-            let data = LexiconCompiler.compile(wordList: text)
+            let data = LexiconCompiler.compile(wordList: text, curated: curated, offensive: offensive, followers: followers)
             try FileManager.default.createDirectory(
                 at: url.deletingLastPathComponent(),
                 withIntermediateDirectories: true
@@ -53,7 +56,12 @@ enum LexiconInstaller {
         return LexiconStatus(
             wordCount: header.wordCount,
             byteCount: data.count,
-            note: "Installed for the keyboard. Full Access keeps this file on this iPhone."
+            note: "Installed for the keyboard. It stays on this iPhone."
         )
+    }
+
+    private static func bundled(_ name: String) -> String {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "txt") else { return "" }
+        return (try? String(contentsOf: url, encoding: .utf8)) ?? ""
     }
 }

@@ -167,3 +167,19 @@ struct BoundaryTests {
         #expect(script.engine.phase == .idle)
     }
 }
+
+struct FieldHostTests {
+    @Test func markedTextOmittedFromTheProxyStillMatches() {
+        var field = Field()
+        field.setComposing("meaning")
+        let prefix = String(field.text.prefix(field.marked?.lowerBound ?? 0))
+        let suffix = String(field.text.dropFirst(field.marked?.upperBound ?? 0))
+        #expect(field.matchesHostContext(before: prefix, after: suffix))
+        #expect(field.matchesHostContext(before: field.text, after: ""))
+    }
+
+    @Test func aDifferentDocumentDoesNotMatch() {
+        var field = Field(text: "hey ", caret: 4)
+        #expect(!field.matchesHostContext(before: "xyz", after: ""))
+    }
+}

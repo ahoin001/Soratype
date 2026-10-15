@@ -33,6 +33,8 @@ public struct KeyboardEngine: Sendable {
     private var lastShiftTap = 0
     private var verbatim = false
     private var repeatUnit: RepeatUnit?
+    private var suppressLiftDelete = false
+    private var scrubUndo: [Character] = []
     private let policy: HandOffPolicy
 
     public init(
@@ -78,6 +80,10 @@ public struct KeyboardEngine: Sendable {
             promote(index)
         case .acceptChip(let index):
             acceptChip(index)
+        case .rejectChip(let index):
+            rejectChip(index)
+        case .suppressLiftDelete:
+            suppressLiftDelete = true
         }
         return effects
     }
@@ -137,6 +143,9 @@ public struct KeyboardEngine: Sendable {
 
     private mutating func ingestDown(_ sample: TouchSample, key: PlacedKey) {
         repeatUnit = nil
+        if case .backspace = key.kind {
+            scrubUndo.removeAll(keepingCapacity: true)
+        }
         if key.kind.isStrokeEligible {
             resolveGrace(at: sample.time.milliseconds)
             let thumb = ThumbIdentity.thumb(at: sample.point, midline: layout.midline)
@@ -166,6 +175,15 @@ public struct KeyboardEngine: Sendable {
     }
 
     private mutating func ingestUp(_ sample: TouchSample) {
+        if let key = sample.key, case .letter = key.kind {
+            let center = key.frame.center
+            memory.noteBias(
+                thumb: ThumbIdentity.thumb(at: sample.point, midline: layout.midline),
+                dx: sample.point.x - center.x,
+                dy: sample.point.y - center.y,
+                limit: max(1, layout.keyWidth * 0.35)
+            )
+        }
         if let travel = segmenter.spaceTravel(for: sample.finger, at: sample.time.milliseconds) {
             _ = segmenter.up(sample, otherThumbDown: false)
             resolveSpaceGesture(travel)
@@ -194,6 +212,10 @@ public struct KeyboardEngine: Sendable {
     private mutating func ingestNonLetterLift(_ key: PlacedKey) {
         switch key.kind {
         case .backspace:
+            if suppressLiftDelete {
+                suppressLiftDelete = false
+                return
+            }
             ingestBoundary(.backspace)
         case .return:
             ingestBoundary(.return)
@@ -205,7 +227,7 @@ public struct KeyboardEngine: Sendable {
             effects.append(.page(.letters))
         case .digit(let character), .punctuation(let character):
             ingestBoundary(.punctuation(character))
-        case .letter, .space:
+        case .letter, .space, .nextKeyboard:
             break
         }
     }
@@ -220,7 +242,7 @@ public struct KeyboardEngine: Sendable {
             return
         }
         if travel.distance >= GestureThresholds.spaceTravel, travel.dy > 0, abs(travel.dy) > abs(travel.dx) {
-            effects.append(.page(.numbers))
+            effects.append(.page(.punctuation))
             return
         }
         if travel.distance >= GestureThresholds.spaceTravel, travel.dy < 0, abs(travel.dy) > abs(travel.dx) {
@@ -246,7 +268,10 @@ public struct KeyboardEngine: Sendable {
         if phase == .contact, draft.contains(where: { $0.stroke != 0 }) {
             phase = .swipeOpen
         }
-        if shift == .once { shift = .off }
+        if shift == .once {
+            shift = .off
+            effects.append(.shift(.off))
+        }
         guard decodeNow else { return }
         refreshComposing(allowDecode: true)
     }
@@ -264,8 +289,10 @@ public struct KeyboardEngine: Sendable {
         } else {
             showComposing(AimedSpelling.text(from: draft))
             if allowDecode, decodesInline {
-                let strip = assistant.preview(decode(draft), now: now, costs: costs)
-                effects.append(.strip(strip))
+                let result = decode(draft)
+                if splitJoinedDraft(using: result) { return }
+                let strip = assistant.preview(result, now: now, costs: costs)
+                emitStrip(strip)
             }
         }
     }
@@ -324,7 +351,7 @@ public struct KeyboardEngine: Sendable {
         phase = .grace(deadline: time + settings.handoffGraceMilliseconds)
         showComposing(displayWord(result))
         let preview = assistant.preview(result, now: time, costs: costs)
-        effects.append(.strip(preview))
+        emitStrip(preview)
     }
 
     private mutating func ingestBoundary(_ boundary: Boundary) {
@@ -377,6 +404,8 @@ public struct KeyboardEngine: Sendable {
             lastCommit = nil
         case .liftWord:
             liftWord()
+        case .scrub(let steps):
+            scrub(steps)
         }
     }
 
@@ -452,6 +481,12 @@ public struct KeyboardEngine: Sendable {
     }
 
     private mutating func commitSettled(_ result: DecodeResult, reason: SettleReason) {
+        if splitJoinedDraft(using: result) {
+            if !draft.isEmpty, reason == .space || reason == .return {
+                commitSwipe(decode(draft))
+            }
+            return
+        }
         let typed = AimedSpelling.text(from: draft)
         if let suffix = InflectionJoiner.suffix(in: typed),
            let stem = lastCommit?.word,
@@ -550,9 +585,9 @@ public struct KeyboardEngine: Sendable {
         assistant.pinned = nil
         memory.noteAccept(word, previous: prior, now: now)
         let suffixChip = self.suffixChip(for: word)
-        let follower = memory.follower(of: word)
+        let follower = memory.follower(of: word) ?? lexicon.followers(of: word.lowercased()).first
         let landed = assistant.landed(result, aimed: aimed, suffix: suffixChip, follower: follower)
-        effects.append(.strip(landed))
+        emitStrip(landed)
         settleCount += 1
     }
 
@@ -578,7 +613,7 @@ public struct KeyboardEngine: Sendable {
         graceResult = nil
         memory.noteAccept(word, previous: prior, now: now)
         let landed = assistant.landed(result, aimed: stem, suffix: nil, follower: nil)
-        effects.append(.strip(landed))
+        emitStrip(landed)
         settleCount += 1
     }
 
@@ -609,11 +644,11 @@ public struct KeyboardEngine: Sendable {
                 let count = commit.word.count + (commit.trailingSpace ? 1 : 0)
                 deleteCharacters(count)
                 memory.noteSwipeRemoval(word: commit.word, aimed: commit.aimed, now: now)
-                effects.append(.strip(Strip(
+                emitStrip(Strip(
                     chips: ([commit.word] + commit.alternatives + [commit.aimed]).uniqueChips,
                     highlighted: 0,
                     preview: false
-                )))
+                ))
             }
             lastCommit = nil
             repeatUnit = .word
@@ -624,7 +659,7 @@ public struct KeyboardEngine: Sendable {
             repeatUnit = .character
         case .tap:
             if commit.trailingSpace {
-                deleteCharacters(1)
+                deleteCharacters(commit.word.count + 1)
                 restoreComposing(commit.word, observations: commit.observations)
             } else {
                 deleteCharacters(max(commit.word.count, 1))
@@ -768,7 +803,31 @@ public struct KeyboardEngine: Sendable {
             showComposing(text)
         }
         let current = assistant.strip
-        effects.append(.strip(current))
+        emitStrip(current)
+    }
+
+    private mutating func rejectChip(_ index: Int) {
+        guard let text = assistant.remove(index) else { return }
+        memory.noteReject(text)
+        emitStrip(assistant.strip)
+    }
+
+    private mutating func scrub(_ steps: Int) {
+        guard steps != 0 else { return }
+        if steps < 0 {
+            if lastCommit != nil { lastCommit = nil }
+            for _ in 0..<(-steps) {
+                guard field.caret > 0, let character = field.text.prefix(field.caret).last else { break }
+                scrubUndo.append(character)
+                deleteCharacters(1)
+            }
+        } else {
+            for _ in 0..<steps {
+                guard let character = scrubUndo.popLast() else { break }
+                field.insert(String(character))
+                effects.append(.insert(String(character)))
+            }
+        }
     }
 
     private mutating func acceptChip(_ index: Int) {
@@ -827,13 +886,41 @@ public struct KeyboardEngine: Sendable {
     }
 
     private mutating func ingestVerbatim(_ sample: TouchSample) {
-        guard sample.phase == .up, let key = sample.key else { return }
+        switch sample.phase {
+        case .down:
+            guard let key = sample.key else { return }
+            let thumb = ThumbIdentity.thumb(at: sample.point, midline: layout.midline)
+            _ = segmenter.down(
+                sample,
+                key: key,
+                thumb: thumb,
+                shifted: shift != .off,
+                otherThumbDown: false
+            )
+        case .move:
+            _ = segmenter.move(sample, key: sample.key, otherThumbDown: false)
+        case .up, .cancel:
+            let key = sample.key ?? segmenter.landingKey(for: sample.finger)
+            if sample.phase == .cancel {
+                _ = segmenter.cancel(sample, otherThumbDown: false)
+            } else {
+                _ = segmenter.up(sample, otherThumbDown: false)
+            }
+            guard sample.phase == .up, let key else { return }
+            insertVerbatim(key)
+        }
+    }
+
+    private mutating func insertVerbatim(_ key: PlacedKey) {
         switch key.kind {
         case .letter(let character):
             let text = shift == .off ? String(character) : String(character).uppercased()
             field.insert(text)
             effects.append(.insert(text))
-            if shift == .once { shift = .off }
+            if shift == .once {
+                shift = .off
+                effects.append(.shift(.off))
+            }
         case .digit(let character), .punctuation(let character):
             field.insert(String(character))
             effects.append(.insert(String(character)))
@@ -851,6 +938,8 @@ public struct KeyboardEngine: Sendable {
             effects.append(.page(.numbers))
         case .letters:
             effects.append(.page(.letters))
+        case .nextKeyboard:
+            break
         }
     }
 
@@ -864,21 +953,72 @@ public struct KeyboardEngine: Sendable {
             shift = .off
         }
         lastShiftTap = now
+        effects.append(.shift(shift))
     }
 
     private mutating func applyPreview(_ result: DecodeResult) {
+        if splitJoinedDraft(using: result) { return }
         let word = displayWord(result)
         if draft.contains(where: { $0.stroke != 0 }) {
             showComposing(word)
         }
         let preview = assistant.preview(result, now: now, costs: costs)
-        effects.append(.strip(preview))
+        emitStrip(preview)
     }
 
     private func displayWord(_ result: DecodeResult) -> String {
         if let pinned = assistant.pinned { return pinned }
         if let top = result.top, !top.isEmpty { return top }
         return result.aimed
+    }
+
+    private mutating func splitJoinedDraft(using result: DecodeResult) -> Bool {
+        guard phase == .tapOpen, segmenter.activeCount == 0 else { return false }
+        guard let cut = draft.firstIndex(where: { $0.stroke != 0 }), cut > 0 else { return false }
+        let joined = displayWord(result).lowercased()
+        let score = result.readings.first?.score ?? costs.weakScore
+        let weak = !lexicon.contains(joined) || score <= costs.weakScore
+        guard weak else { return false }
+        let prefix = Array(draft.prefix(cut))
+        let rest = Array(draft.suffix(from: cut))
+        let prefixResult = decode(prefix)
+        let restResult = decode(rest)
+        let prefixWord = displayWord(prefixResult)
+        let restWord = displayWord(restResult)
+        guard lexicon.contains(prefixWord.lowercased()), lexicon.contains(restWord.lowercased()) else { return false }
+        write(
+            prefixWord,
+            trailingSpace: true,
+            kind: .tap,
+            aimed: prefixResult.aimed,
+            typed: AimedSpelling.text(from: prefix),
+            result: prefixResult,
+            observations: prefix
+        )
+        let committed = lastCommit
+        restoreComposing(restWord, observations: rest)
+        lastCommit = committed
+        phase = .swipeOpen
+        if !chunks.isEmpty {
+            chunks[0] = GestureChunk(start: 0, end: draft.count, isStroke: true)
+        }
+        return true
+    }
+
+    private mutating func emitStrip(_ strip: Strip) {
+        var shown = strip
+        if !shown.preview {
+            shown.chips.removeAll { chip in
+                chip.role != .leader && memory.shouldFade(chip.text)
+            }
+            for chip in shown.chips where chip.role != .leader {
+                memory.noteImpression(chip.text)
+            }
+            if let highlighted = shown.highlighted, highlighted >= shown.chips.count {
+                shown.highlighted = shown.chips.isEmpty ? nil : 0
+            }
+        }
+        effects.append(.strip(shown))
     }
 
     private func suffixChip(for word: String) -> String? {

@@ -1,0 +1,439 @@
+{
+  "": {
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/master.swiftdeps"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Assist/Strip.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Strip.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Strip.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Strip~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Strip.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Strip.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Assist/WordAssistant.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordAssistant.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordAssistant.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordAssistant~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordAssistant.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordAssistant.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Clock/EngineClock.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineClock.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineClock.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineClock~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineClock.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineClock.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Clock/EngineInstant.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInstant.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInstant.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInstant~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInstant.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInstant.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Clock/ManualClock.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ManualClock.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ManualClock.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ManualClock~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ManualClock.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ManualClock.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/AimedSpelling.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AimedSpelling.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AimedSpelling.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AimedSpelling~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AimedSpelling.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AimedSpelling.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/AlignmentPathMatcher.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AlignmentPathMatcher.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AlignmentPathMatcher.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AlignmentPathMatcher~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AlignmentPathMatcher.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AlignmentPathMatcher.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/BeamSearch.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BeamSearch.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BeamSearch.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BeamSearch~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BeamSearch.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BeamSearch.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/ChainBeam.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ChainBeam.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ChainBeam.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ChainBeam~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ChainBeam.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ChainBeam.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeCosts.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeCosts.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeCosts.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeCosts~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeCosts.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeCosts.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeRequest.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeRequest.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeRequest.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeRequest~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeRequest.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeRequest.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeResult.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeResult.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeResult.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeResult~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeResult.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecodeResult.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecoderPool.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecoderPool.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecoderPool.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecoderPool~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecoderPool.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/DecoderPool.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/Hypothesis.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Hypothesis.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Hypothesis.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Hypothesis~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Hypothesis.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Hypothesis.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/PathCheck.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PathCheck.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PathCheck.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PathCheck~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PathCheck.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PathCheck.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/RecoveryPass.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/RecoveryPass.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/RecoveryPass.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/RecoveryPass~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/RecoveryPass.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/RecoveryPass.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/SearchCandidate.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SearchCandidate.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SearchCandidate.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SearchCandidate~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SearchCandidate.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SearchCandidate.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/ShapeRescue.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShapeRescue.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShapeRescue.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShapeRescue~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShapeRescue.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShapeRescue.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/SpatialModel.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SpatialModel.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SpatialModel.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SpatialModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SpatialModel.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SpatialModel.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Engine/KeyboardEngine.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardEngine.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardEngine.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardEngine~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardEngine.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardEngine.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Geometry/Point.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Point.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Point.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Point~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Point.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Point.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Geometry/Rect.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Rect.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Rect.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Rect~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Rect.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Rect.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Geometry/Size.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Size.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Size.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Size~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Size.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Size.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Gesture/GestureComposer.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureComposer.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureComposer.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureComposer~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureComposer.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureComposer.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Gesture/GestureSegmenter.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureSegmenter.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureSegmenter.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureSegmenter~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureSegmenter.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureSegmenter.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Gesture/GestureThresholds.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureThresholds.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureThresholds.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureThresholds~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureThresholds.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureThresholds.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Gesture/SwipeCoordinator.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SwipeCoordinator.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SwipeCoordinator.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SwipeCoordinator~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SwipeCoordinator.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SwipeCoordinator.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/Boundary.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Boundary.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Boundary.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Boundary~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Boundary.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Boundary.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/EngineInput.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInput.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInput.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInput~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInput.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineInput.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/FingerID.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/FingerID.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/FingerID.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/FingerID~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/FingerID.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/FingerID.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/HostEvent.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HostEvent.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HostEvent.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HostEvent~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HostEvent.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HostEvent.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/Observation.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Observation.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Observation.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Observation~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Observation.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Observation.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/ObservationKind.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ObservationKind.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ObservationKind.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ObservationKind~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ObservationKind.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ObservationKind.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/ShiftState.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShiftState.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShiftState.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShiftState~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShiftState.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ShiftState.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/Thumb.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Thumb.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Thumb.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Thumb~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Thumb.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Thumb.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/ThumbIdentity.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ThumbIdentity.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ThumbIdentity.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ThumbIdentity~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ThumbIdentity.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/ThumbIdentity.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/TouchPhase.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchPhase.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchPhase.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchPhase~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchPhase.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchPhase.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Input/TouchSample.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchSample.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchSample.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchSample~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchSample.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/TouchSample.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Layout/KeyCenters.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyCenters.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyCenters.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyCenters~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyCenters.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyCenters.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Layout/KeyKind.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyKind.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyKind.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyKind~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyKind.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyKind.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Layout/KeyboardLayout.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardLayout.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardLayout.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardLayout~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardLayout.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardLayout.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Layout/KeyboardPage.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardPage.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardPage.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardPage~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardPage.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/KeyboardPage.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Layout/LetterByte.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LetterByte.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LetterByte.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LetterByte~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LetterByte.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LetterByte.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Layout/PlacedKey.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PlacedKey.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PlacedKey.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PlacedKey~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PlacedKey.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/PlacedKey.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Learning/LearningMemory.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LearningMemory.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LearningMemory.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LearningMemory~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LearningMemory.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LearningMemory.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Lexicon/Lexicon.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Lexicon.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Lexicon.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Lexicon~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Lexicon.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Lexicon.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Lexicon/LexiconFormat.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LexiconFormat.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LexiconFormat.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LexiconFormat~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LexiconFormat.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/LexiconFormat.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Lexicon/MappedLexicon.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MappedLexicon.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MappedLexicon.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MappedLexicon~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MappedLexicon.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MappedLexicon.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Lexicon/MemoryLexicon.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MemoryLexicon.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MemoryLexicon.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MemoryLexicon~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MemoryLexicon.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/MemoryLexicon.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Session/GestureChunk.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureChunk.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureChunk.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureChunk~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureChunk.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/GestureChunk.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Session/HandOffPolicy.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HandOffPolicy.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HandOffPolicy.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HandOffPolicy~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HandOffPolicy.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/HandOffPolicy.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Session/WordPhase.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordPhase.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordPhase.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordPhase~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordPhase.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/WordPhase.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Settings/AppGroup.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AppGroup.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AppGroup.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AppGroup~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AppGroup.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/AppGroup.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Settings/BackspaceMode.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BackspaceMode.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BackspaceMode.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BackspaceMode~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BackspaceMode.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/BackspaceMode.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Settings/EngineSettings.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineSettings.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineSettings.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineSettings~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineSettings.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineSettings.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Settings/SettingsStore.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettingsStore.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettingsStore.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettingsStore~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettingsStore.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettingsStore.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Settings/SharedFiles.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SharedFiles.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SharedFiles.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SharedFiles~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SharedFiles.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SharedFiles.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Text/CommitRecord.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/CommitRecord.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/CommitRecord.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/CommitRecord~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/CommitRecord.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/CommitRecord.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Text/EngineEffect.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineEffect.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineEffect.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineEffect~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineEffect.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/EngineEffect.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Text/Field.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Field.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Field.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Field~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Field.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/Field.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Text/InflectionJoiner.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/InflectionJoiner.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/InflectionJoiner.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/InflectionJoiner~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/InflectionJoiner.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/InflectionJoiner.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Text/SettleReason.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettleReason.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettleReason.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettleReason~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettleReason.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/arm64-apple-macos/debug/SoratypeEngine.build/SettleReason.dia"
+  }
+}

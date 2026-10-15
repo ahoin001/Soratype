@@ -222,4 +222,49 @@ struct WorkedExampleTests {
         script.elapseGrace()
         #expect(script.text == "cat ")
     }
+
+    @Test func privateSurvivesNeighborKeysBetweenLetters() {
+        var script = Script()
+        script.tap("p", finger: 1)
+        script.tap("r", finger: 2)
+        script.tap("i", finger: 1)
+        script.wait(800)
+        script.swipe(along: "va", finger: 2)
+        script.wait(800)
+        script.swipe(along: "te", finger: 2)
+        script.space()
+        #expect(script.text == "private ")
+    }
+
+    @Test func quitSurvivesNeighborKeysOnTheSwipe() {
+        var script = Script()
+        script.tap("q", finger: 2)
+        script.swipe(along: "ui", finger: 1)
+        script.tap("t", finger: 2)
+        script.space()
+        #expect(script.text == "quit ")
+    }
+
+    @Test func waitJoinsThroughNeighborKeys() {
+        var script = Script()
+        script.down("w", finger: 2)
+        script.trace(from: "w", to: "a", finger: 2)
+        script.move("a", finger: 2)
+        script.tap("i", finger: 1)
+        script.trace(from: "a", to: "t", finger: 2)
+        script.move("t", finger: 2)
+        script.up(2)
+        script.elapseGrace()
+        #expect(script.text == "wait ")
+    }
+
+    @Test func tapThenStrokesThenALetterStayOneWord() {
+        var script = Script()
+        script.tap("m", finger: 1)
+        script.swipe(along: "ea", finger: 2)
+        script.swipe(along: "nin", finger: 1)
+        script.tap("g", finger: 2)
+        script.space()
+        #expect(script.text == "meaning ")
+    }
 }

@@ -6,4 +6,5 @@ public enum Boundary: Sendable, Equatable {
     case emoji(String)
     case caret(Int)
     case liftWord
+    case scrub(Int)
 }

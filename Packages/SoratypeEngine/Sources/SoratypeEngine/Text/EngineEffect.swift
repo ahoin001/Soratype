@@ -6,4 +6,5 @@ public enum EngineEffect: Sendable, Equatable {
     case replaceTail(delete: Int, insert: String)
     case strip(Strip)
     case page(KeyboardPage)
+    case shift(ShiftState)
 }

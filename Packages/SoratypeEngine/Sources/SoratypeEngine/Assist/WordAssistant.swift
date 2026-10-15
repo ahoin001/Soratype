@@ -72,6 +72,19 @@ public struct WordAssistant: Sendable {
         return chip.text
     }
 
+    public mutating func remove(_ index: Int) -> String? {
+        guard strip.chips.indices.contains(index) else { return nil }
+        let text = strip.chips[index].text
+        var chips = strip.chips
+        chips.remove(at: index)
+        var highlighted = strip.highlighted
+        if let current = highlighted, current >= chips.count {
+            highlighted = chips.isEmpty ? nil : 0
+        }
+        strip = Strip(chips: chips, highlighted: highlighted, preview: strip.preview)
+        return text
+    }
+
     private mutating func stickyLeader(_ readings: [Reading], now: Int, margin: Double, hold: Int) -> String {
         guard let top = readings.first else { return leader }
         if leader.isEmpty {

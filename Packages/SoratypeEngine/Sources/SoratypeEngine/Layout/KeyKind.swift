@@ -8,6 +8,7 @@ public enum KeyKind: Sendable, Equatable, Hashable {
     case shift
     case symbols
     case letters
+    case nextKeyboard
 
     public var isStrokeEligible: Bool {
         if case .letter = self { return true }
@@ -22,7 +23,7 @@ public enum KeyKind: Sendable, Equatable, Hashable {
             " "
         case .return:
             "\n"
-        case .backspace, .shift, .symbols, .letters:
+        case .backspace, .shift, .symbols, .letters, .nextKeyboard:
             nil
         }
     }

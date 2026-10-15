@@ -29,7 +29,7 @@ enum ProxyBridge {
                 if !insert.isEmpty {
                     proxy.insertText(insert)
                 }
-            case .strip, .page:
+            case .strip, .page, .shift:
                 break
             }
         }

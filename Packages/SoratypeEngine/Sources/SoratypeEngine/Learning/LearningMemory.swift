@@ -38,6 +38,7 @@ public struct LearningMemory: Sendable, Equatable, Codable {
     public var leftBias: Bias
     public var rightBias: Bias
     public var pendingRefusal: Refusal?
+    public var impressions: [String: Int]
 
     public init(
         habits: [String: Habit] = [:],
@@ -49,7 +50,8 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         personal: [String: Int] = [:],
         leftBias: Bias = .zero,
         rightBias: Bias = .zero,
-        pendingRefusal: Refusal? = nil
+        pendingRefusal: Refusal? = nil,
+        impressions: [String: Int] = [:]
     ) {
         self.habits = habits
         self.pairs = pairs
@@ -61,9 +63,58 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         self.leftBias = leftBias
         self.rightBias = rightBias
         self.pendingRefusal = pendingRefusal
+        self.impressions = impressions
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case habits, pairs, prototypes, rejections, refusals, blocklist, personal
+        case leftBias, rightBias, pendingRefusal, impressions
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            habits: try container.decodeIfPresent([String: Habit].self, forKey: .habits) ?? [:],
+            pairs: try container.decodeIfPresent([String: Int].self, forKey: .pairs) ?? [:],
+            prototypes: try container.decodeIfPresent([Prototype].self, forKey: .prototypes) ?? [],
+            rejections: try container.decodeIfPresent([String: String].self, forKey: .rejections) ?? [:],
+            refusals: try container.decodeIfPresent([Refusal].self, forKey: .refusals) ?? [],
+            blocklist: try container.decodeIfPresent([String].self, forKey: .blocklist) ?? [],
+            personal: try container.decodeIfPresent([String: Int].self, forKey: .personal) ?? [:],
+            leftBias: try container.decodeIfPresent(Bias.self, forKey: .leftBias) ?? .zero,
+            rightBias: try container.decodeIfPresent(Bias.self, forKey: .rightBias) ?? .zero,
+            pendingRefusal: try container.decodeIfPresent(Refusal.self, forKey: .pendingRefusal),
+            impressions: try container.decodeIfPresent([String: Int].self, forKey: .impressions) ?? [:]
+        )
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(habits, forKey: .habits)
+        try container.encode(pairs, forKey: .pairs)
+        try container.encode(prototypes, forKey: .prototypes)
+        try container.encode(rejections, forKey: .rejections)
+        try container.encode(refusals, forKey: .refusals)
+        try container.encode(blocklist, forKey: .blocklist)
+        try container.encode(personal, forKey: .personal)
+        try container.encode(leftBias, forKey: .leftBias)
+        try container.encode(rightBias, forKey: .rightBias)
+        try container.encodeIfPresent(pendingRefusal, forKey: .pendingRefusal)
+        try container.encode(impressions, forKey: .impressions)
     }
 
     public static let empty = LearningMemory()
+
+    public static func skipsLearning(_ word: String) -> Bool {
+        let token = word.trimmingCharacters(in: .whitespacesAndNewlines)
+        if token.contains("@") || token.contains("://") || token.contains("www.") { return true }
+        if token.range(of: #"\d{4,}"#, options: .regularExpression) != nil { return true }
+        return false
+    }
+
+    public func shouldFade(_ word: String) -> Bool {
+        (impressions[word.lowercased()] ?? 0) >= 3
+    }
 
     public func snapshot(previousWord: String?, now: Int, observations: [Observation]) -> LearningSnapshot {
         var habitBonus: [String: Double] = [:]
@@ -123,7 +174,9 @@ public struct LearningMemory: Sendable, Equatable, Codable {
     }
 
     public mutating func noteAccept(_ word: String, previous: String?, now: Int) {
+        guard !Self.skipsLearning(word) else { return }
         let key = word.lowercased()
+        impressions[key] = 0
         var habit = habits[key] ?? Habit(uses: 0, lastUse: now)
         habit.uses += 1
         habit.lastUse = now
@@ -150,6 +203,7 @@ public struct LearningMemory: Sendable, Equatable, Codable {
     }
 
     public mutating func noteChoice(word: String, aimed: String, observations: [Observation]) {
+        impressions[word.lowercased()] = 0
         let kept = AimedSpelling.observations(observations)
         guard let first = kept.first?.letter, let last = kept.last?.letter else { return }
         prototypes.append(Prototype(
@@ -162,10 +216,37 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         if prototypes.count > 160 { prototypes.removeFirst(prototypes.count - 160) }
         if word.lowercased() != aimed.lowercased() {
             rejections[aimed.lowercased()] = word.lowercased()
-            if rejections.count > 200, let oldest = rejections.keys.first {
-                rejections.removeValue(forKey: oldest)
-            }
         }
+        if rejections.count > 200, let oldest = rejections.keys.first {
+            rejections.removeValue(forKey: oldest)
+        }
+    }
+
+    public mutating func noteImpression(_ word: String) {
+        let key = word.lowercased()
+        guard !shouldFade(key) else { return }
+        impressions[key, default: 0] += 1
+    }
+
+    public mutating func noteReject(_ word: String) {
+        let key = word.lowercased()
+        impressions[key] = 3
+        guard !blocklist.contains(key) else { return }
+        blocklist.append(key)
+        if blocklist.count > 300 {
+            blocklist.removeFirst(blocklist.count - 300)
+        }
+    }
+
+    public mutating func forget(_ word: String) {
+        let key = word.lowercased()
+        habits[key] = nil
+        personal[key] = nil
+        impressions[key] = nil
+        rejections[key] = nil
+        blocklist.removeAll { $0 == key }
+        prototypes.removeAll { $0.word == key }
+        pairs = pairs.filter { !$0.key.hasSuffix("\t" + key) && !$0.key.hasPrefix(key + "\t") }
     }
 
     public mutating func noteBias(thumb: Thumb, dx: Double, dy: Double, limit: Double) {

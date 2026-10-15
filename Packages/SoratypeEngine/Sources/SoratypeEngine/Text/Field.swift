@@ -74,4 +74,17 @@ public struct Field: Sendable, Equatable {
             self.marked = nil
         }
     }
+
+    /// True when the proxy's before/after contexts are the document this field already wrote.
+    /// Marked text may be omitted from those contexts, or included in the text before the caret.
+    public func matchesHostContext(before: String, after: String) -> Bool {
+        let safeCaret = min(caret, text.count)
+        if before == String(text.prefix(safeCaret)), after == String(text.dropFirst(safeCaret)) {
+            return true
+        }
+        guard let marked, marked.upperBound <= text.count else { return false }
+        let prefix = String(text.prefix(marked.lowerBound))
+        let suffix = String(text.dropFirst(marked.upperBound))
+        return before == prefix && after == suffix
+    }
 }

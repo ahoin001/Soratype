@@ -1,14 +1,23 @@
 import SwiftUI
+import UIKit
 
 struct InstructionsSection: View {
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Enable Soratype")
-                .font(.system(.title2, design: .rounded, weight: .semibold))
-            Text("Open Settings, then General, then Keyboard, then Keyboards, and add Soratype. Full Access lets the keyboard read the word list and the five switches below. Those files stay on this iPhone.")
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Enable")
+                .font(.system(.title3, design: .rounded, weight: .semibold))
+            VStack(alignment: .leading, spacing: 8) {
+                Text("1. Open Settings")
+                Text("2. General, then Keyboard, then Keyboards")
+                Text("3. Add Soratype")
+            }
+            .foregroundStyle(CompanionChrome.haze)
+            Button("Open Settings") {
+                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                UIApplication.shared.open(url)
+            }
+            .buttonStyle(SealButtonStyle())
         }
-        .accessibilityElement(children: .combine)
+        .companionCard()
     }
 }
