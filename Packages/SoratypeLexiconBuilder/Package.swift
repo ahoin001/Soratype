@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "SoratypeLexiconBuilder",
     platforms: [
-        .iOS(.v17),
+        .iOS(.v26),
         .macOS(.v14),
     ],
     products: [
