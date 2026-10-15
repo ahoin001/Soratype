@@ -39,14 +39,15 @@ public enum LexiconFormat {
     }
 
     public static func readUInt16(_ data: Data, _ offset: Int) -> UInt16 {
-        data.withUnsafeBytes { raw in
-            raw.loadUnaligned(fromByteOffset: offset, as: UInt16.self)
-        }
+        let bytes = data.span
+        return UInt16(bytes[offset]) | (UInt16(bytes[offset + 1]) << 8)
     }
 
     public static func readUInt32(_ data: Data, _ offset: Int) -> UInt32 {
-        data.withUnsafeBytes { raw in
-            raw.loadUnaligned(fromByteOffset: offset, as: UInt32.self)
-        }
+        let bytes = data.span
+        return UInt32(bytes[offset])
+            | (UInt32(bytes[offset + 1]) << 8)
+            | (UInt32(bytes[offset + 2]) << 16)
+            | (UInt32(bytes[offset + 3]) << 24)
     }
 }

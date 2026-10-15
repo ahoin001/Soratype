@@ -2,6 +2,12 @@
 
 import PackageDescription
 
+let lexiconSwiftSettings: [SwiftSetting] = [
+    .swiftLanguageMode(.v6),
+    .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+    .enableUpcomingFeature("InferIsolatedConformances"),
+]
+
 let package = Package(
     name: "SoratypeLexiconBuilder",
     platforms: [
@@ -18,13 +24,12 @@ let package = Package(
         .target(
             name: "SoratypeLexiconBuilder",
             dependencies: ["SoratypeEngine"],
-            swiftSettings: [
-                .swiftLanguageMode(.v6),
-            ]
+            swiftSettings: lexiconSwiftSettings
         ),
         .testTarget(
             name: "SoratypeLexiconBuilderTests",
-            dependencies: ["SoratypeLexiconBuilder", "SoratypeEngine"]
+            dependencies: ["SoratypeLexiconBuilder", "SoratypeEngine"],
+            swiftSettings: lexiconSwiftSettings
         ),
     ]
 )

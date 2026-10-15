@@ -13,6 +13,8 @@ struct LexiconCompilerTests {
         #expect(lexicon.contains("walking"))
         #expect(!lexicon.contains("teh"))
         #expect(lexicon.rank(of: "the") == 1)
-        #expect(lexicon.endpoints(first: LetterByte.byte("t")!, last: LetterByte.byte("e")!).contains("the"))
+        let first = try #require(LetterByte.byte("t"))
+        let last = try #require(LetterByte.byte("e"))
+        #expect(lexicon.endpoints(first: first, last: last).contains("the"))
     }
 }

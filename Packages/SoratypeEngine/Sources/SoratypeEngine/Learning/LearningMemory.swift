@@ -208,8 +208,8 @@ public struct MemoryStore: Sendable {
         return memory
     }
 
-    public func save(_ memory: LearningMemory) {
-        guard let data = try? JSONEncoder().encode(memory) else { return }
-        try? data.write(to: url, options: .atomic)
+    public func save(_ memory: LearningMemory) throws {
+        let data = try JSONEncoder().encode(memory)
+        try data.write(to: url, options: .atomic)
     }
 }

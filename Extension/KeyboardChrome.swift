@@ -1,6 +1,6 @@
 import UIKit
 
-enum KeyboardChrome {
+nonisolated enum KeyboardChrome {
     static let paper = UIColor(red: 0.957, green: 0.945, blue: 0.925, alpha: 1)
     static let cap = UIColor.white
     static let mist = UIColor(red: 0.906, green: 0.886, blue: 0.855, alpha: 1)

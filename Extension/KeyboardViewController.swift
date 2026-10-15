@@ -1,16 +1,22 @@
+import os
 import UIKit
 import SoratypeEngine
 
+private let logger = Logger(subsystem: "com.jonintype.soratype.keyboard", category: "Memory")
+
 final class KeyboardViewController: UIInputViewController {
     private var engine: KeyboardEngine
-    private var surface: KeyboardSurfaceView!
-    private var suggestions: SuggestionStripView!
+    private var surface: KeyboardSurfaceView?
+    private var suggestions: SuggestionStripView?
     private var heightConstraint: NSLayoutConstraint?
     private var fingers: [ObjectIdentifier: FingerTrack] = [:]
     private var nextFinger = 1
     private var queued: [EngineInput] = []
     private var decodeInFlight = false
+    private var decodeGeneration = 0
+    private var decodeTask: Task<Void, Never>?
     private var graceToken = 0
+    private var graceTask: Task<Void, Never>?
     private var suppressHostUntil = Date.distantPast
     private var started = Date()
 
@@ -38,33 +44,35 @@ final class KeyboardViewController: UIInputViewController {
         height.isActive = true
         heightConstraint = height
 
-        suggestions = SuggestionStripView { [weak self] index in
+        let strip = SuggestionStripView { [weak self] index in
             guard let self else { return }
             let input: EngineInput = self.engine.strip.preview ? .promoteChip(index) : .acceptChip(index)
             self.forward(input)
         }
-        surface = KeyboardSurfaceView(frame: .zero) { [weak self] layout in
+        let keys = KeyboardSurfaceView(frame: .zero) { [weak self] layout in
             guard let self else { return }
             self.engine.update(layout: layout)
         }
-        surface.onTouch = { [weak self] phase, touches in
+        keys.onTouch = { [weak self] phase, touches in
             guard let self else { return }
             self.route(phase, touches)
         }
-        suggestions.translatesAutoresizingMaskIntoConstraints = false
-        surface.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(suggestions)
-        view.addSubview(surface)
+        strip.translatesAutoresizingMaskIntoConstraints = false
+        keys.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(strip)
+        view.addSubview(keys)
         NSLayoutConstraint.activate([
-            suggestions.topAnchor.constraint(equalTo: view.topAnchor),
-            suggestions.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            suggestions.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            suggestions.heightAnchor.constraint(equalToConstant: KeyboardChrome.stripHeight),
-            surface.topAnchor.constraint(equalTo: suggestions.bottomAnchor),
-            surface.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            surface.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            surface.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            strip.topAnchor.constraint(equalTo: view.topAnchor),
+            strip.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            strip.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            strip.heightAnchor.constraint(equalToConstant: KeyboardChrome.stripHeight),
+            keys.topAnchor.constraint(equalTo: strip.bottomAnchor),
+            keys.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            keys.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            keys.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+        suggestions = strip
+        surface = keys
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -74,10 +82,12 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     override func viewWillDisappear(_ animated: Bool) {
+        decodeTask?.cancel()
+        graceTask?.cancel()
+        queued.removeAll(keepingCapacity: true)
+        decodeInFlight = false
         forward(.host(.dismiss))
-        if let url = SharedFiles.memoryURL() {
-            MemoryStore(url: url).save(engine.learning)
-        }
+        persistLearning()
         super.viewWillDisappear(animated)
     }
 
@@ -99,12 +109,12 @@ final class KeyboardViewController: UIInputViewController {
         let lexicon = loadLexicon()
         engine = KeyboardEngine(
             lexicon: lexicon,
-            layout: surface.layout,
+            layout: installedSurface().layout,
             settings: settings,
             memory: memory,
             decodesInline: false
         )
-        let secure = textDocumentProxy.isSecureTextEntry
+        let secure = textDocumentProxy.isSecureTextEntry == true
         forward(.host(.verbatim(secure || lexicon.wordCount == 0)))
     }
 
@@ -125,6 +135,7 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func route(_ phase: TouchPhase, _ touches: Set<UITouch>) {
+        let surface = installedSurface()
         for touch in touches {
             let point = touch.location(in: surface)
             let identity = ObjectIdentifier(touch)
@@ -134,14 +145,14 @@ final class KeyboardViewController: UIInputViewController {
                 if let key {
                     surface.setPressed(key.id, pressed: true)
                 }
-                let track = FingerTrack(id: nextFinger)
+                var track = FingerTrack(id: nextFinger)
                 nextFinger += 1
                 track.keyID = key?.id
                 track.points.append(point)
                 fingers[identity] = track
                 send(phase, finger: track.id, point: point, key: key)
             case .move:
-                guard let track = fingers[identity] else { continue }
+                guard var track = fingers[identity] else { continue }
                 if track.points.count < 64 {
                     track.points.append(point)
                 }
@@ -155,6 +166,7 @@ final class KeyboardViewController: UIInputViewController {
                     }
                     track.keyID = key?.id
                 }
+                fingers[identity] = track
                 send(phase, finger: track.id, point: point, key: key)
             case .up, .cancel:
                 guard let track = fingers.removeValue(forKey: identity) else { continue }
@@ -204,6 +216,8 @@ final class KeyboardViewController: UIInputViewController {
 
     private func present(_ effects: [EngineEffect]) {
         guard !effects.isEmpty else { return }
+        let suggestions = installedSuggestions()
+        let surface = installedSurface()
         var document: [EngineEffect] = []
         document.reserveCapacity(effects.count)
         for effect in effects {
@@ -224,8 +238,19 @@ final class KeyboardViewController: UIInputViewController {
     private func scheduleDecode() {
         guard let request = engine.takePendingDecode() else { return }
         decodeInFlight = true
-        Task { @MainActor in
+        decodeGeneration += 1
+        let generation = decodeGeneration
+        decodeTask = Task {
+            guard !Task.isCancelled else {
+                self.finishCancelledDecode(generation)
+                return
+            }
             let result = await DecoderPool.match(request)
+            guard !Task.isCancelled else {
+                self.finishCancelledDecode(generation)
+                return
+            }
+            guard generation == self.decodeGeneration else { return }
             let effects = self.engine.resolve(result)
             self.decodeInFlight = false
             self.present(effects)
@@ -235,10 +260,15 @@ final class KeyboardViewController: UIInputViewController {
             for input in pending {
                 self.forward(input)
             }
-            if self.view.window == nil, let url = SharedFiles.memoryURL() {
-                MemoryStore(url: url).save(self.engine.learning)
+            if self.view.window == nil {
+                self.persistLearning()
             }
         }
+    }
+
+    private func finishCancelledDecode(_ generation: Int) {
+        guard generation == decodeGeneration else { return }
+        decodeInFlight = false
     }
 
     private func scheduleGrace() {
@@ -246,21 +276,49 @@ final class KeyboardViewController: UIInputViewController {
         graceToken += 1
         let token = graceToken
         let wait = max(0, deadline - now().milliseconds)
-        Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(wait))
+        graceTask?.cancel()
+        graceTask = Task {
+            do {
+                try await Task.sleep(for: .milliseconds(wait))
+            } catch {
+                return
+            }
             guard token == self.graceToken else { return }
             guard case .grace = self.engine.phase else { return }
             self.forward(.tick(EngineInstant(milliseconds: deadline)))
         }
     }
 
+    private func persistLearning() {
+        guard let url = SharedFiles.memoryURL() else { return }
+        do {
+            try MemoryStore(url: url).save(engine.learning)
+        } catch {
+            logger.error("Learning memory could not be saved")
+        }
+    }
+
     private func now() -> EngineInstant {
         EngineInstant(milliseconds: Int(Date().timeIntervalSince(started) * 1000))
     }
+
+    private func installedSurface() -> KeyboardSurfaceView {
+        guard let surface else {
+            preconditionFailure("The keyboard surface is created in viewDidLoad")
+        }
+        return surface
+    }
+
+    private func installedSuggestions() -> SuggestionStripView {
+        guard let suggestions else {
+            preconditionFailure("The suggestion strip is created in viewDidLoad")
+        }
+        return suggestions
+    }
 }
 
-private final class FingerTrack {
-    let id: Int
+private struct FingerTrack {
+    var id: Int
     var keyID: String?
     var points: [CGPoint] = []
 

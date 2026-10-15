@@ -2,7 +2,7 @@ import CoreText
 import UIKit
 import SoratypeEngine
 
-final class KeyCapLayer: CALayer {
+nonisolated final class KeyCapLayer: CALayer {
     let keyID: String
     private let text = CATextLayer()
 

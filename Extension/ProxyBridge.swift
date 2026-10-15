@@ -1,4 +1,5 @@
 import UIKit
+import SoratypeEngine
 
 enum ProxyBridge {
     static func apply(_ effects: [EngineEffect], proxy: UITextDocumentProxy) {

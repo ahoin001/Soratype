@@ -18,13 +18,15 @@ public struct SettingsStore: Sendable {
         return settings
     }
 
-    public func save(_ settings: EngineSettings) {
-        guard
-            let defaults = UserDefaults(suiteName: suiteName),
-            let data = try? JSONEncoder().encode(settings)
-        else {
-            return
+    public func save(_ settings: EngineSettings) throws {
+        guard let defaults = UserDefaults(suiteName: suiteName) else {
+            throw SettingsStoreError.unavailableSuite
         }
+        let data = try JSONEncoder().encode(settings)
         defaults.set(data, forKey: AppGroup.settingsKey)
     }
+}
+
+public enum SettingsStoreError: Error, Sendable, Equatable {
+    case unavailableSuite
 }

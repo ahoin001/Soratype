@@ -1,6 +1,7 @@
 import Foundation
 
-public final class MappedLexicon: Lexicon, @unchecked Sendable {
+/// One shared mapping of the word list. The keyboard and the decoder both hold this object, so it stays a class.
+public final class MappedLexicon: Lexicon, Sendable {
     public let wordCount: Int
     public let root = LexiconNode(index: 0)
     private let data: Data
@@ -72,15 +73,13 @@ public final class MappedLexicon: Lexicon, @unchecked Sendable {
 
     private func readNode(_ index: Int) -> NodeRecord {
         let offset = header.nodesOffset + index * LexiconFormat.nodeBytes
-        return data.withUnsafeBytes { raw in
-            NodeRecord(
-                character: raw.load(fromByteOffset: offset, as: UInt8.self),
-                flags: raw.load(fromByteOffset: offset + 1, as: UInt8.self),
-                rank: raw.loadUnaligned(fromByteOffset: offset + 2, as: UInt16.self),
-                childStart: raw.loadUnaligned(fromByteOffset: offset + 4, as: UInt32.self),
-                childCount: raw.loadUnaligned(fromByteOffset: offset + 8, as: UInt16.self)
-            )
-        }
+        return NodeRecord(
+            character: data[offset],
+            flags: data[offset + 1],
+            rank: LexiconFormat.readUInt16(data, offset + 2),
+            childStart: LexiconFormat.readUInt32(data, offset + 4),
+            childCount: LexiconFormat.readUInt16(data, offset + 8)
+        )
     }
 
     private struct NodeRecord {

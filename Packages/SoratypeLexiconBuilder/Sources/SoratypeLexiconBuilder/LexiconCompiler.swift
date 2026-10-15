@@ -132,12 +132,12 @@ public enum LexiconCompiler {
     }
 
     private static func write(_ value: UInt16, to data: inout Data, at offset: Int) {
-        var value = value.littleEndian
-        withUnsafeBytes(of: &value) { data.replaceSubrange(offset..<(offset + 2), with: $0) }
+        var bytes = data.mutableBytes
+        bytes.storeBytes(of: value.littleEndian, toByteOffset: offset, as: UInt16.self)
     }
 
     private static func write(_ value: UInt32, to data: inout Data, at offset: Int) {
-        var value = value.littleEndian
-        withUnsafeBytes(of: &value) { data.replaceSubrange(offset..<(offset + 4), with: $0) }
+        var bytes = data.mutableBytes
+        bytes.storeBytes(of: value.littleEndian, toByteOffset: offset, as: UInt32.self)
     }
 }

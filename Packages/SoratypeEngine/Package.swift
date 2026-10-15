@@ -2,6 +2,12 @@
 
 import PackageDescription
 
+let engineSwiftSettings: [SwiftSetting] = [
+    .swiftLanguageMode(.v6),
+    .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+    .enableUpcomingFeature("InferIsolatedConformances"),
+]
+
 let package = Package(
     name: "SoratypeEngine",
     platforms: [
@@ -14,13 +20,12 @@ let package = Package(
     targets: [
         .target(
             name: "SoratypeEngine",
-            swiftSettings: [
-                .swiftLanguageMode(.v6),
-            ]
+            swiftSettings: engineSwiftSettings
         ),
         .testTarget(
             name: "SoratypeEngineTests",
-            dependencies: ["SoratypeEngine"]
+            dependencies: ["SoratypeEngine"],
+            swiftSettings: engineSwiftSettings
         ),
     ]
 )
