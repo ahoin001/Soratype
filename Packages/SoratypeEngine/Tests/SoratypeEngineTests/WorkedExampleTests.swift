@@ -174,12 +174,12 @@ struct WorkedExampleTests {
     @Test func estrangedKeepsTheTapInsideTheStroke() {
         var script = Script()
         script.down("e", finger: 2)
-        for character in ["s", "t", "r", "a"] {
+        for character: Character in ["s", "t", "r", "a"] {
             script.wait(12)
             script.move(character, finger: 2)
         }
         script.tap("n", finger: 1)
-        for character in ["g", "e", "d"] {
+        for character: Character in ["g", "e", "d"] {
             script.wait(12)
             script.move(character, finger: 2)
         }

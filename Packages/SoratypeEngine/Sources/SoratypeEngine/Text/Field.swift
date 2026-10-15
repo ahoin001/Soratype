@@ -71,7 +71,7 @@ public struct Field: Sendable, Equatable {
     public mutating func moveCaret(to offset: Int) {
         caret = min(max(0, offset), text.count)
         if let marked, !marked.contains(caret) && caret != marked.upperBound {
-            marked = nil
+            self.marked = nil
         }
     }
 }
