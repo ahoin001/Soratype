@@ -1,6 +1,6 @@
 import Testing
-import LeanTypeEngine
-@testable import LeanTypeLexiconBuilder
+import SoratypeEngine
+@testable import SoratypeLexiconBuilder
 
 struct LexiconCompilerTests {
     @Test func roundTripReadsPackedWords() throws {

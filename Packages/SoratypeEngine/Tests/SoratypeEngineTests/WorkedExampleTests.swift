@@ -1,5 +1,5 @@
 import Testing
-@testable import LeanTypeEngine
+@testable import SoratypeEngine
 
 struct WorkedExampleTests {
     @Test func heyJoinsAcrossALongPause() {

@@ -1,5 +1,5 @@
 import UIKit
-import LeanTypeEngine
+import SoratypeEngine
 
 final class SuggestionStripView: UIView {
     var onChip: (Int) -> Void

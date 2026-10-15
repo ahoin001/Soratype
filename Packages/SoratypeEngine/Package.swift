@@ -3,24 +3,24 @@
 import PackageDescription
 
 let package = Package(
-    name: "LeanTypeEngine",
+    name: "SoratypeEngine",
     platforms: [
         .iOS(.v17),
         .macOS(.v14),
     ],
     products: [
-        .library(name: "LeanTypeEngine", targets: ["LeanTypeEngine"]),
+        .library(name: "SoratypeEngine", targets: ["SoratypeEngine"]),
     ],
     targets: [
         .target(
-            name: "LeanTypeEngine",
+            name: "SoratypeEngine",
             swiftSettings: [
                 .swiftLanguageMode(.v6),
             ]
         ),
         .testTarget(
-            name: "LeanTypeEngineTests",
-            dependencies: ["LeanTypeEngine"]
+            name: "SoratypeEngineTests",
+            dependencies: ["SoratypeEngine"]
         ),
     ]
 )

@@ -1,4 +1,4 @@
-# LeanType Typing Engine: Project Brief
+# Soratype Typing Engine: Project Brief
 
 Oct 15, 2026 · @Alexander Hoinville
 

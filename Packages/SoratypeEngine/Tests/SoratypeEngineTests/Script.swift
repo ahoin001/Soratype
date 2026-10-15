@@ -1,5 +1,5 @@
 import Foundation
-@testable import LeanTypeEngine
+@testable import SoratypeEngine
 
 struct Script {
     var engine: KeyboardEngine

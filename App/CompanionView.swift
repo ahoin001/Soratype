@@ -1,5 +1,5 @@
 import SwiftUI
-import LeanTypeEngine
+import SoratypeEngine
 
 struct CompanionView: View {
     @State private var settings = SettingsStore().load()
@@ -18,7 +18,7 @@ struct CompanionView: View {
                 .frame(maxWidth: .infinity)
             }
             .background(paper)
-            .navigationTitle("LeanType")
+            .navigationTitle("Soratype")
             .font(.system(.body, design: .rounded))
         }
         .onChange(of: settings) { _, updated in
@@ -28,9 +28,9 @@ struct CompanionView: View {
 
     private var instructions: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Enable LeanType")
+            Text("Enable Soratype")
                 .font(.system(.title2, design: .rounded, weight: .semibold))
-            Text("Open Settings, then General, then Keyboard, then Keyboards, and add LeanType. Full Access lets the keyboard read the word list and the five switches below. Those files stay on this iPhone.")
+            Text("Open Settings, then General, then Keyboard, then Keyboards, and add Soratype. Full Access lets the keyboard read the word list and the five switches below. Those files stay on this iPhone.")
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }

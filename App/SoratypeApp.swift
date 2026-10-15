@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct LeanTypeApp: App {
+struct SoratypeApp: App {
     var body: some Scene {
         WindowGroup {
             CompanionView()

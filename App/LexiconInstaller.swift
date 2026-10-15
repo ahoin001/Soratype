@@ -1,6 +1,6 @@
 import Foundation
-import LeanTypeEngine
-import LeanTypeLexiconBuilder
+import SoratypeEngine
+import SoratypeLexiconBuilder
 
 enum LexiconInstaller {
     static func current() -> LexiconStatus {
@@ -26,7 +26,7 @@ enum LexiconInstaller {
             return LexiconStatus(
                 wordCount: 0,
                 byteCount: 0,
-                note: "Turn on the App Group for LeanType before rebuilding. The keyboard still has its bundled list."
+                note: "Turn on the App Group for Soratype before rebuilding. The keyboard still has its bundled list."
             )
         }
         do {

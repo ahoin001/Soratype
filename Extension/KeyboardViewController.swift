@@ -1,5 +1,5 @@
 import UIKit
-import LeanTypeEngine
+import SoratypeEngine
 
 final class KeyboardViewController: UIInputViewController {
     private var engine: KeyboardEngine

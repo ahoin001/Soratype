@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1000000000000000000001A /* LeanTypeEngine in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000017 /* LeanTypeEngine */; };
-		A1000000000000000000001B /* LeanTypeLexiconBuilder in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000018 /* LeanTypeLexiconBuilder */; };
-		A1000000000000000000001C /* LeanTypeEngine in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000019 /* LeanTypeEngine */; };
-		A1000000000000000000001D /* LeanTypeKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* LeanTypeKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A1000000000000000000001A /* SoratypeEngine in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000017 /* SoratypeEngine */; };
+		A1000000000000000000001B /* SoratypeLexiconBuilder in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000018 /* SoratypeLexiconBuilder */; };
+		A1000000000000000000001C /* SoratypeEngine in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000019 /* SoratypeEngine */; };
+		A1000000000000000000001D /* SoratypeKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* SoratypeKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -19,7 +19,7 @@
 			containerPortal = A10000000000000000000001 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A10000000000000000000003;
-			remoteInfo = LeanTypeKeyboard;
+			remoteInfo = SoratypeKeyboard;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -30,7 +30,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				A1000000000000000000001D /* LeanTypeKeyboard.appex in Embed Foundation Extensions */,
+				A1000000000000000000001D /* SoratypeKeyboard.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -38,25 +38,25 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A10000000000000000000004 /* LeanType.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeanType.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A10000000000000000000005 /* LeanTypeKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LeanTypeKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000004 /* Soratype.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Soratype.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000005 /* SoratypeKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SoratypeKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A10000000000000000000008 /* Exceptions for "App" folder in "LeanType" target */ = {
+		A10000000000000000000008 /* Exceptions for "App" folder in "Soratype" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				LeanType.entitlements,
+				Soratype.entitlements,
 			);
-			target = A10000000000000000000002 /* LeanType */;
+			target = A10000000000000000000002 /* Soratype */;
 		};
-		A10000000000000000000009 /* Exceptions for "Extension" folder in "LeanTypeKeyboard" target */ = {
+		A10000000000000000000009 /* Exceptions for "Extension" folder in "SoratypeKeyboard" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 				Keyboard.entitlements,
 			);
-			target = A10000000000000000000003 /* LeanTypeKeyboard */;
+			target = A10000000000000000000003 /* SoratypeKeyboard */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -64,7 +64,7 @@
 		A10000000000000000000006 /* App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A10000000000000000000008 /* Exceptions for "App" folder in "LeanType" target */,
+				A10000000000000000000008 /* Exceptions for "App" folder in "Soratype" target */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -72,7 +72,7 @@
 		A10000000000000000000007 /* Extension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				A10000000000000000000009 /* Exceptions for "Extension" folder in "LeanTypeKeyboard" target */,
+				A10000000000000000000009 /* Exceptions for "Extension" folder in "SoratypeKeyboard" target */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -84,8 +84,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1000000000000000000001A /* LeanTypeEngine in Frameworks */,
-				A1000000000000000000001B /* LeanTypeLexiconBuilder in Frameworks */,
+				A1000000000000000000001A /* SoratypeEngine in Frameworks */,
+				A1000000000000000000001B /* SoratypeLexiconBuilder in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,7 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1000000000000000000001C /* LeanTypeEngine in Frameworks */,
+				A1000000000000000000001C /* SoratypeEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,8 +112,8 @@
 		A1000000000000000000000B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000004 /* LeanType.app */,
-				A10000000000000000000005 /* LeanTypeKeyboard.appex */,
+				A10000000000000000000004 /* Soratype.app */,
+				A10000000000000000000005 /* SoratypeKeyboard.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,9 +121,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A10000000000000000000002 /* LeanType */ = {
+		A10000000000000000000002 /* Soratype */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A1000000000000000000000D /* Build configuration list for PBXNativeTarget "LeanType" */;
+			buildConfigurationList = A1000000000000000000000D /* Build configuration list for PBXNativeTarget "Soratype" */;
 			buildPhases = (
 				A1000000000000000000001E /* Sources */,
 				A1000000000000000000001F /* Frameworks */,
@@ -138,18 +138,18 @@
 			fileSystemSynchronizedGroups = (
 				A10000000000000000000006 /* App */,
 			);
-			name = LeanType;
+			name = Soratype;
 			packageProductDependencies = (
-				A10000000000000000000017 /* LeanTypeEngine */,
-				A10000000000000000000018 /* LeanTypeLexiconBuilder */,
+				A10000000000000000000017 /* SoratypeEngine */,
+				A10000000000000000000018 /* SoratypeLexiconBuilder */,
 			);
-			productName = LeanType;
-			productReference = A10000000000000000000004 /* LeanType.app */;
+			productName = Soratype;
+			productReference = A10000000000000000000004 /* Soratype.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A10000000000000000000003 /* LeanTypeKeyboard */ = {
+		A10000000000000000000003 /* SoratypeKeyboard */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A1000000000000000000000E /* Build configuration list for PBXNativeTarget "LeanTypeKeyboard" */;
+			buildConfigurationList = A1000000000000000000000E /* Build configuration list for PBXNativeTarget "SoratypeKeyboard" */;
 			buildPhases = (
 				A10000000000000000000022 /* Sources */,
 				A10000000000000000000023 /* Frameworks */,
@@ -162,12 +162,12 @@
 			fileSystemSynchronizedGroups = (
 				A10000000000000000000007 /* Extension */,
 			);
-			name = LeanTypeKeyboard;
+			name = SoratypeKeyboard;
 			packageProductDependencies = (
-				A10000000000000000000019 /* LeanTypeEngine */,
+				A10000000000000000000019 /* SoratypeEngine */,
 			);
-			productName = LeanTypeKeyboard;
-			productReference = A10000000000000000000005 /* LeanTypeKeyboard.appex */;
+			productName = SoratypeKeyboard;
+			productReference = A10000000000000000000005 /* SoratypeKeyboard.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -179,7 +179,7 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastUpgradeCheck = 2700;
 			};
-			buildConfigurationList = A1000000000000000000000C /* Build configuration list for PBXProject "LeanType" */;
+			buildConfigurationList = A1000000000000000000000C /* Build configuration list for PBXProject "Soratype" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -188,15 +188,15 @@
 			);
 			mainGroup = A1000000000000000000000A;
 			packageReferences = (
-				A10000000000000000000015 /* XCLocalSwiftPackageReference "Packages/LeanTypeEngine" */,
-				A10000000000000000000016 /* XCLocalSwiftPackageReference "Packages/LeanTypeLexiconBuilder" */,
+				A10000000000000000000015 /* XCLocalSwiftPackageReference "Packages/SoratypeEngine" */,
+				A10000000000000000000016 /* XCLocalSwiftPackageReference "Packages/SoratypeLexiconBuilder" */,
 			);
 			productRefGroup = A1000000000000000000000B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A10000000000000000000002 /* LeanType */,
-				A10000000000000000000003 /* LeanTypeKeyboard */,
+				A10000000000000000000002 /* Soratype */,
+				A10000000000000000000003 /* SoratypeKeyboard */,
 			);
 		};
 /* End PBXProject section */
@@ -238,7 +238,7 @@
 /* Begin PBXTargetDependency section */
 		A10000000000000000000025 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A10000000000000000000003 /* LeanTypeKeyboard */;
+			target = A10000000000000000000003 /* SoratypeKeyboard */;
 			targetProxy = A10000000000000000000026 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -285,12 +285,12 @@
 		A10000000000000000000011 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = App/LeanType.entitlements;
+				CODE_SIGN_ENTITLEMENTS = App/Soratype.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = LeanType;
+				INFOPLIST_KEY_CFBundleDisplayName = Soratype;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -301,7 +301,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jonintype.leantype;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jonintype.soratype;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -314,12 +314,12 @@
 		A10000000000000000000012 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = App/LeanType.entitlements;
+				CODE_SIGN_ENTITLEMENTS = App/Soratype.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = LeanType;
+				INFOPLIST_KEY_CFBundleDisplayName = Soratype;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -330,7 +330,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jonintype.leantype;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jonintype.soratype;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -349,14 +349,14 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = LeanType;
+				INFOPLIST_KEY_CFBundleDisplayName = Soratype;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jonintype.leantype.keyboard;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jonintype.soratype.keyboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -376,14 +376,14 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Extension/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = LeanType;
+				INFOPLIST_KEY_CFBundleDisplayName = Soratype;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jonintype.leantype.keyboard;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jonintype.soratype.keyboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -397,7 +397,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A1000000000000000000000C /* Build configuration list for PBXProject "LeanType" */ = {
+		A1000000000000000000000C /* Build configuration list for PBXProject "Soratype" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A1000000000000000000000F /* Debug */,
@@ -406,7 +406,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A1000000000000000000000D /* Build configuration list for PBXNativeTarget "LeanType" */ = {
+		A1000000000000000000000D /* Build configuration list for PBXNativeTarget "Soratype" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A10000000000000000000011 /* Debug */,
@@ -415,7 +415,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A1000000000000000000000E /* Build configuration list for PBXNativeTarget "LeanTypeKeyboard" */ = {
+		A1000000000000000000000E /* Build configuration list for PBXNativeTarget "SoratypeKeyboard" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A10000000000000000000013 /* Debug */,
@@ -427,31 +427,31 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		A10000000000000000000015 /* XCLocalSwiftPackageReference "Packages/LeanTypeEngine" */ = {
+		A10000000000000000000015 /* XCLocalSwiftPackageReference "Packages/SoratypeEngine" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/LeanTypeEngine;
+			relativePath = Packages/SoratypeEngine;
 		};
-		A10000000000000000000016 /* XCLocalSwiftPackageReference "Packages/LeanTypeLexiconBuilder" */ = {
+		A10000000000000000000016 /* XCLocalSwiftPackageReference "Packages/SoratypeLexiconBuilder" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/LeanTypeLexiconBuilder;
+			relativePath = Packages/SoratypeLexiconBuilder;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A10000000000000000000017 /* LeanTypeEngine */ = {
+		A10000000000000000000017 /* SoratypeEngine */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A10000000000000000000015 /* XCLocalSwiftPackageReference "Packages/LeanTypeEngine" */;
-			productName = LeanTypeEngine;
+			package = A10000000000000000000015 /* XCLocalSwiftPackageReference "Packages/SoratypeEngine" */;
+			productName = SoratypeEngine;
 		};
-		A10000000000000000000018 /* LeanTypeLexiconBuilder */ = {
+		A10000000000000000000018 /* SoratypeLexiconBuilder */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A10000000000000000000016 /* XCLocalSwiftPackageReference "Packages/LeanTypeLexiconBuilder" */;
-			productName = LeanTypeLexiconBuilder;
+			package = A10000000000000000000016 /* XCLocalSwiftPackageReference "Packages/SoratypeLexiconBuilder" */;
+			productName = SoratypeLexiconBuilder;
 		};
-		A10000000000000000000019 /* LeanTypeEngine */ = {
+		A10000000000000000000019 /* SoratypeEngine */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A10000000000000000000015 /* XCLocalSwiftPackageReference "Packages/LeanTypeEngine" */;
-			productName = LeanTypeEngine;
+			package = A10000000000000000000015 /* XCLocalSwiftPackageReference "Packages/SoratypeEngine" */;
+			productName = SoratypeEngine;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,5 +1,5 @@
 import Foundation
-import LeanTypeEngine
+import SoratypeEngine
 
 public enum LexiconCompiler {
     public static func compile(wordsInFrequencyOrder words: [String]) -> Data {
