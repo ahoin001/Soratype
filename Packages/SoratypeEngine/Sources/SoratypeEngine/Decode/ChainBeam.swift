@@ -47,21 +47,24 @@ struct ChainBeam {
                     let penalty = orderCost(taking: observation, pending: pending, costs: costs)
                     if var consumed = Hypothesis(
                         node: hyp.node, bytes: hyp.bytes, shifts: hyp.shifts, score: hyp.score,
-                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled
+                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled,
+                        crossingSpent: hyp.crossingSpent
                     ).consuming(observation, lexicon: lexicon, costs: costs, double: false) {
                         consumed.score -= penalty
                         next.append(hyp.advanced(with: consumed, side: .left))
                     }
                     if var doubled = Hypothesis(
                         node: hyp.node, bytes: hyp.bytes, shifts: hyp.shifts, score: hyp.score,
-                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled
+                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled,
+                        crossingSpent: hyp.crossingSpent
                     ).consuming(observation, lexicon: lexicon, costs: costs, double: true) {
                         doubled.score -= penalty
                         next.append(hyp.advanced(with: doubled, side: .left))
                     }
                     if let skipped = Hypothesis(
                         node: hyp.node, bytes: hyp.bytes, shifts: hyp.shifts, score: hyp.score,
-                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled
+                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled,
+                        crossingSpent: hyp.crossingSpent
                     ).skipping(observation, costs: costs) {
                         next.append(hyp.advanced(with: skipped, side: .left))
                     }
@@ -72,21 +75,24 @@ struct ChainBeam {
                     let penalty = orderCost(taking: observation, pending: pending, costs: costs)
                     if var consumed = Hypothesis(
                         node: hyp.node, bytes: hyp.bytes, shifts: hyp.shifts, score: hyp.score,
-                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled
+                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled,
+                        crossingSpent: hyp.crossingSpent
                     ).consuming(observation, lexicon: lexicon, costs: costs, double: false) {
                         consumed.score -= penalty
                         next.append(hyp.advanced(with: consumed, side: .right))
                     }
                     if var doubled = Hypothesis(
                         node: hyp.node, bytes: hyp.bytes, shifts: hyp.shifts, score: hyp.score,
-                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled
+                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled,
+                        crossingSpent: hyp.crossingSpent
                     ).consuming(observation, lexicon: lexicon, costs: costs, double: true) {
                         doubled.score -= penalty
                         next.append(hyp.advanced(with: doubled, side: .right))
                     }
                     if let skipped = Hypothesis(
                         node: hyp.node, bytes: hyp.bytes, shifts: hyp.shifts, score: hyp.score,
-                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled
+                        skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled,
+                        crossingSpent: hyp.crossingSpent
                     ).skipping(observation, costs: costs) {
                         next.append(hyp.advanced(with: skipped, side: .right))
                     }
@@ -99,7 +105,8 @@ struct ChainBeam {
         let candidates = finished.compactMap { hyp -> SearchCandidate? in
             Hypothesis(
                 node: hyp.node, bytes: hyp.bytes, shifts: hyp.shifts, score: hyp.score,
-                skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled
+                skipsLeft: hyp.skipsLeft, skipsRight: hyp.skipsRight, doubled: hyp.doubled,
+                crossingSpent: hyp.crossingSpent
             ).finished(in: lexicon, costs: costs)
         }
         return (candidates, false)
@@ -122,13 +129,14 @@ private struct ChainHypothesis: Sendable {
     var skipsLeft: Int
     var skipsRight: Int
     var doubled: Bool
+    var crossingSpent: Double
     var leftIndex: Int
     var rightIndex: Int
 
     static func root(_ node: LexiconNode) -> ChainHypothesis {
         ChainHypothesis(
             node: node, bytes: [], shifts: 0, score: 0,
-            skipsLeft: 0, skipsRight: 0, doubled: false,
+            skipsLeft: 0, skipsRight: 0, doubled: false, crossingSpent: 0,
             leftIndex: 0, rightIndex: 0
         )
     }
@@ -142,6 +150,7 @@ private struct ChainHypothesis: Sendable {
         copy.skipsLeft = hyp.skipsLeft
         copy.skipsRight = hyp.skipsRight
         copy.doubled = hyp.doubled
+        copy.crossingSpent = hyp.crossingSpent
         if side == .left {
             copy.leftIndex += 1
         } else {

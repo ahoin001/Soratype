@@ -20,7 +20,7 @@ public enum AlignmentPathMatcher {
                 costs: request.costs,
                 deadline: deadline
             )
-        var pool = searched.candidates
+        var pool = priced(searched.candidates, observations: request.observations, centers: request.centers)
         if ContinuousClock().now < deadline {
             pool += ShapeRescue.nominate(
                 observations: request.observations,
@@ -57,6 +57,21 @@ public enum AlignmentPathMatcher {
             unsure: unsure,
             budgetExhausted: searched.exhausted && pool.isEmpty
         )
+    }
+
+    private static func priced(
+        _ candidates: [SearchCandidate],
+        observations: [Observation],
+        centers: KeyCenters
+    ) -> [SearchCandidate] {
+        candidates.compactMap { candidate in
+            guard let curve = PathCheck.cost(candidate.lowercase, observations: observations, centers: centers) else {
+                return nil
+            }
+            var priced = candidate
+            priced.score -= curve
+            return priced
+        }
     }
 
     private static func decorate(_ candidates: [SearchCandidate], request: DecodeRequest, aimed: String) -> [Reading] {
@@ -115,7 +130,8 @@ public enum AlignmentPathMatcher {
 
     /// A curated contraction leads its bare spelling. `preferAimed` must not put `dont` back in front of `don't`.
     private static func preferContraction(_ readings: [Reading], aimed: String, request: DecodeRequest) -> [Reading] {
-        guard let display = Contractions.display(matching: aimed) else { return readings }
+        let spellings = [aimed] + readings.map(\.text)
+        guard let display = spellings.compactMap({ Contractions.display(matching: $0) }).first else { return readings }
         let key = display.lowercased()
         let known = request.lexicon.contains(key) || (request.learning.personal[key] ?? 0) >= 3
         guard known, !request.lexicon.isOffensive(key) else { return readings }

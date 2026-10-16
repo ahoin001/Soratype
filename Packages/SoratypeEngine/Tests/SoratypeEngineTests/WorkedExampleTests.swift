@@ -349,4 +349,42 @@ struct WorkedExampleTests {
         script.space()
         #expect(script.text == "meaning ")
     }
+
+    @Test func aStraightPathThroughExtraKeysCommitsTheWord() {
+        var script = Script(words: ["pot"])
+        script.swipe(along: "pot")
+        let aimed = AimedSpelling.text(from: script.engine.observations)
+        let crossings = script.engine.observations.filter { $0.kind == .crossing }
+        #expect(!crossings.isEmpty)
+        for crossing in crossings {
+            let letter = LetterByte.spelling([crossing.letter])
+            #expect(!aimed.contains(letter))
+        }
+        script.elapseGrace()
+        #expect(script.text == "pot ")
+    }
+
+    @Test func aLongWordSurvivesPassThroughKeys() {
+        var script = Script(words: ["absolute"])
+        script.swipe(along: "absolute")
+        script.elapseGrace()
+        #expect(script.text == "absolute ")
+    }
+
+    @Test func anUnknownTwoLetterSwipeStaysTheAimedLetters() {
+        var script = Script(words: ["hello"])
+        script.swipe("qr")
+        script.elapseGrace()
+        #expect(script.text == "qr ")
+    }
+
+    @Test func theStrongSpellingStaysAChipWhenTheWordDiffers() {
+        var script = Script(words: ["pot"])
+        script.swipe(along: "pot")
+        let aimed = AimedSpelling.text(from: script.engine.observations)
+        script.elapseGrace()
+        #expect(script.text == "pot ")
+        #expect(aimed.lowercased() != "pot")
+        #expect(script.engine.strip.chips.contains { $0.role == .aimed && $0.text.lowercased() == aimed.lowercased() })
+    }
 }

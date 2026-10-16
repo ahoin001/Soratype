@@ -5,6 +5,8 @@ public struct DecodeCosts: Sendable, Equatable {
     public var skipAnchor: Double
     public var skipCenteredCrossing: Double
     public var skipGraze: Double
+    /// The most a word pays for ignoring pass-through keys, however many there are.
+    public var crossingSkipCap: Double
     public var skipRest: Double
     public var skipSlip: Double
     public var skipBudgetPerThumb: Int
@@ -30,8 +32,9 @@ public struct DecodeCosts: Sendable, Equatable {
         sigmaYInKeyHeights: Double = 0.40,
         doubleLetter: Double = 0.25,
         skipAnchor: Double = 3.2,
-        skipCenteredCrossing: Double = 1.6,
+        skipCenteredCrossing: Double = 0.4,
         skipGraze: Double = 0.35,
+        crossingSkipCap: Double = 1.0,
         skipRest: Double = 0.2,
         skipSlip: Double = 0.05,
         skipBudgetPerThumb: Int = 2,
@@ -58,6 +61,7 @@ public struct DecodeCosts: Sendable, Equatable {
         self.skipAnchor = skipAnchor
         self.skipCenteredCrossing = skipCenteredCrossing
         self.skipGraze = skipGraze
+        self.crossingSkipCap = crossingSkipCap
         self.skipRest = skipRest
         self.skipSlip = skipSlip
         self.skipBudgetPerThumb = skipBudgetPerThumb
@@ -98,8 +102,7 @@ public struct DecodeCosts: Sendable, Equatable {
 
     public func countsTowardBudget(_ observation: Observation) -> Bool {
         switch observation.kind {
-        case .rest, .slip: false
-        case .crossing: observation.centered
+        case .rest, .slip, .crossing: false
         case .anchor, .tap, .pin: true
         }
     }

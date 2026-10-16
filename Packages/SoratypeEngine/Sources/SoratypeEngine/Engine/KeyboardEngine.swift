@@ -401,7 +401,7 @@ public struct KeyboardEngine: Sendable {
 
     private mutating func resolveGrace(at time: Int) {
         guard case .grace(let deadline) = phase else { return }
-        if time <= deadline, let graceResult, policy.isWeak(graceResult, lexicon: lexicon) {
+        if time <= deadline, let graceResult, policy.isWeak(graceResult, observations: draft, lexicon: lexicon) {
             phase = .swipeOpen
             graceMerged = true
             fragmentCount = draft.count
@@ -1060,8 +1060,13 @@ public struct KeyboardEngine: Sendable {
         let shown = result.readings.filter { isSuggestion($0.text) }
         let top = shown.first?.score ?? 0
         var chips: [Chip] = []
+        let spelled = result.aimed
+        if !spelled.isEmpty, spelled.lowercased() != committed.lowercased() {
+            chips.append(Chip(text: spelled, role: .aimed))
+        }
         for reading in shown {
             if reading.text.lowercased() == committed.lowercased() { continue }
+            if reading.text.lowercased() == spelled.lowercased() { continue }
             if top - reading.score > 4 { continue }
             let role: ChipRole = reading.aimed ? .aimed : .alternative
             chips.append(Chip(text: reading.text, role: role))

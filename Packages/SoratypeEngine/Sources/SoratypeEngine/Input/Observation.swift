@@ -78,8 +78,7 @@ public struct Observation: Sendable, Equatable {
     public var countsInAimedSpelling: Bool {
         switch kind {
         case .anchor, .tap, .pin, .rest: true
-        case .crossing: centered
-        case .slip: false
+        case .crossing, .slip: false
         }
     }
 }

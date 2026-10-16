@@ -38,7 +38,7 @@ struct BoundaryTests {
         script.swipe("pil")
         script.elapseGrace()
         script.backspace()
-        #expect(script.text == "pil")
+        #expect(script.text == "pl")
         #expect(script.engine.phase == .tapOpen)
     }
 

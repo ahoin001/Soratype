@@ -6,9 +6,13 @@ struct Hypothesis: Sendable {
     var skipsLeft: Int
     var skipsRight: Int
     var doubled: Bool
+    var crossingSpent: Double
 
     static func make(node: LexiconNode) -> Hypothesis {
-        Hypothesis(node: node, bytes: [], shifts: 0, score: 0, skipsLeft: 0, skipsRight: 0, doubled: false)
+        Hypothesis(
+            node: node, bytes: [], shifts: 0, score: 0,
+            skipsLeft: 0, skipsRight: 0, doubled: false, crossingSpent: 0
+        )
     }
 
     func consuming(
@@ -45,7 +49,8 @@ struct Hypothesis: Sendable {
             score: score,
             skipsLeft: skipsLeft,
             skipsRight: skipsRight,
-            doubled: didDouble
+            doubled: didDouble,
+            crossingSpent: crossingSpent
         )
     }
 
@@ -53,7 +58,13 @@ struct Hypothesis: Sendable {
         guard let cost = costs.skipCost(observation) else { return nil }
         var left = skipsLeft
         var right = skipsRight
-        if costs.countsTowardBudget(observation) {
+        var spent = crossingSpent
+        var charge = cost
+        if observation.kind == .crossing {
+            let room = max(0, costs.crossingSkipCap - spent)
+            charge = min(cost, room)
+            spent += charge
+        } else if costs.countsTowardBudget(observation) {
             if observation.thumb == .left {
                 if left >= costs.skipBudgetPerThumb { return nil }
                 left += 1
@@ -64,9 +75,10 @@ struct Hypothesis: Sendable {
             }
         }
         var copy = self
-        copy.score -= cost
+        copy.score -= charge
         copy.skipsLeft = left
         copy.skipsRight = right
+        copy.crossingSpent = spent
         return copy
     }
 

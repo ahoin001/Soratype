@@ -8,15 +8,15 @@ enum ShapeRescue {
         let strokeIDs = Set(observations.map(\.stroke).filter { $0 != 0 })
         guard !strokeIDs.isEmpty else { return [] }
         if observations.allSatisfy({ $0.stroke != 0 }), strokeIDs.count == 1 {
-            return nominateChain(observations, lexicon: lexicon, centers: centers, costs: costs)
+            return nominateChain(observations, curve: observations, lexicon: lexicon, centers: centers, costs: costs)
         }
         var found: [SearchCandidate] = []
         for stroke in strokeIDs {
             let chain = observations.filter { $0.stroke == stroke }
             let others = observations.filter { $0.stroke != stroke }
-            for candidate in nominateChain(chain, lexicon: lexicon, centers: centers, costs: costs) {
+            for candidate in nominateChain(chain, curve: observations, lexicon: lexicon, centers: centers, costs: costs) {
                 let word = LetterByte.spelling(candidate.bytes)
-                guard othersSpellRemainder(word, chain: chain, others: others) else { continue }
+                guard keepsStrongLetters(word, chain: chain, others: others) else { continue }
                 found.append(candidate)
             }
         }
@@ -25,6 +25,7 @@ enum ShapeRescue {
 
     private static func nominateChain(
         _ observations: [Observation],
+        curve: [Observation],
         lexicon: any Lexicon,
         centers: KeyCenters,
         costs: DecodeCosts
@@ -34,24 +35,32 @@ enum ShapeRescue {
         guard let first = aimed.first?.letter, let last = aimed.last?.letter else { return [] }
         var found: [SearchCandidate] = []
         for word in lexicon.endpoints(first: first, last: last) {
-            guard PathCheck.explains(word, observations: observations, centers: centers) else { continue }
+            guard let curveCost = PathCheck.cost(word, observations: curve, centers: centers) else { continue }
             guard let rank = lexicon.rank(of: word) else { continue }
             let place = Double(Int(rank) - 1) / Double(max(lexicon.wordCount - 1, 1))
             found.append(SearchCandidate(
                 bytes: Array(word.utf8),
                 shifts: 0,
-                score: -0.8 - costs.frequencyWeight * place
+                score: -curveCost - costs.frequencyWeight * place
             ))
         }
         return found
     }
 
-    private static func othersSpellRemainder(_ word: String, chain: [Observation], others: [Observation]) -> Bool {
-        var letters = Array(word.utf8)
-        for letter in AimedSpelling.observations(chain).map(\.letter) {
-            guard let index = letters.firstIndex(of: letter) else { return false }
-            letters.remove(at: index)
+    /// Strong letters from either thumb have to appear in order. A crossing does not.
+    private static func keepsStrongLetters(_ word: String, chain: [Observation], others: [Observation]) -> Bool {
+        let letters = Array(word.utf8)
+        let chainLetters = AimedSpelling.observations(chain).map(\.letter)
+        let otherLetters = AimedSpelling.observations(others).map(\.letter)
+        return containsInOrder(chainLetters, in: letters) && containsInOrder(otherLetters, in: letters)
+    }
+
+    private static func containsInOrder(_ required: [UInt8], in letters: [UInt8]) -> Bool {
+        var cursor = 0
+        for letter in required {
+            guard let index = letters[cursor...].firstIndex(of: letter) else { return false }
+            cursor = index + 1
         }
-        return AimedSpelling.observations(others).map(\.letter) == letters
+        return true
     }
 }
