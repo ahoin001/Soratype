@@ -11,8 +11,6 @@ final class KeyboardViewController: UIInputViewController {
     private var heightConstraint: NSLayoutConstraint?
     private var fingers: [ObjectIdentifier: FingerTrack] = [:]
     private var nextFinger = 1
-    private var queued: [EngineInput] = []
-    private var decodeInFlight = false
     private var decodeGeneration = 0
     private var decodeTask: Task<Void, Never>?
     private var graceToken = 0
@@ -39,6 +37,7 @@ final class KeyboardViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = KeyboardChrome.air
+        view.isMultipleTouchEnabled = true
         overrideUserInterfaceStyle = .light
         let height = view.heightAnchor.constraint(equalToConstant: KeyboardChrome.boardHeight)
         height.priority = UILayoutPriority(999)
@@ -54,9 +53,9 @@ final class KeyboardViewController: UIInputViewController {
             guard let self else { return }
             self.engine.update(layout: layout)
         }
-        keys.onTouch = { [weak self] phase, touches in
+        keys.onTouch = { [weak self] phase, touches, event in
             guard let self else { return }
-            self.route(phase, touches)
+            self.route(phase, touches, event)
         }
         strip.translatesAutoresizingMaskIntoConstraints = false
         keys.translatesAutoresizingMaskIntoConstraints = false
@@ -81,9 +80,15 @@ final class KeyboardViewController: UIInputViewController {
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        releaseTouchDelays()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         installedSurface().showsNextKeyboard = needsInputModeSwitchKey
+        releaseTouchDelays()
         reloadResources()
         syncHost()
     }
@@ -93,8 +98,6 @@ final class KeyboardViewController: UIInputViewController {
         graceTask?.cancel()
         for task in repeatTasks.values { task.cancel() }
         repeatTasks.removeAll()
-        queued.removeAll(keepingCapacity: true)
-        decodeInFlight = false
         forward(.host(.dismiss))
         persistLearning()
         super.viewWillDisappear(animated)
@@ -152,83 +155,132 @@ final class KeyboardViewController: UIInputViewController {
         forward(.host(.textChanged(host, caret: before.count)))
     }
 
-    private func route(_ phase: TouchPhase, _ touches: Set<UITouch>) {
+    private func route(_ phase: TouchPhase, _ touches: Set<UITouch>, _ event: UIEvent?) {
         let surface = installedSurface()
         for touch in touches {
-            let point = touch.location(in: surface)
-            let identity = ObjectIdentifier(touch)
-            switch phase {
-            case .down:
-                let key = surface.key(at: point)
+            deliver(phase, touch, surface: surface)
+        }
+        absorbUnopenedTouches(in: event, skipping: touches, surface: surface)
+        let strokes = fingers.values.map(\.points).filter(isStroke)
+        surface.setTrails(strokes)
+    }
+
+    /// A second finger can already be in the event while its own began callback is still held.
+    private func absorbUnopenedTouches(in event: UIEvent?, skipping touches: Set<UITouch>, surface: KeyboardSurfaceView) {
+        guard let others = event?.allTouches else { return }
+        for touch in others where !touches.contains(touch) && fingers[ObjectIdentifier(touch)] == nil {
+            deliver(.down, touch, surface: surface)
+            switch touch.phase {
+            case .moved, .stationary, .regionMoved:
+                deliver(.move, touch, surface: surface)
+            case .ended:
+                deliver(.up, touch, surface: surface)
+            case .cancelled:
+                deliver(.cancel, touch, surface: surface)
+            case .began, .regionEntered, .regionExited:
+                break
+            @unknown default:
+                break
+            }
+        }
+    }
+
+    private func deliver(_ phase: TouchPhase, _ touch: UITouch, surface: KeyboardSurfaceView) {
+        let point = touch.location(in: surface)
+        let identity = ObjectIdentifier(touch)
+        switch phase {
+        case .down:
+            guard fingers[identity] == nil else { return }
+            let key = surface.key(at: point)
+            if let key {
+                surface.setPressed(key.id, pressed: true)
+            }
+            var track = FingerTrack(id: nextFinger)
+            nextFinger += 1
+            track.keyID = key?.id
+            track.origin = point
+            track.backspace = key?.kind == .backspace
+            track.points.append(point)
+            fingers[identity] = track
+            if let key, case .letter = key.kind {
+                surface.showPopup(for: key)
+                impact.impactOccurred(intensity: 0.55)
+                impact.prepare()
+            }
+            if track.backspace {
+                armBackspace(identity)
+            }
+            send(phase, finger: track.id, point: point, key: key)
+        case .move:
+            if fingers[identity] == nil {
+                deliver(.down, touch, surface: surface)
+            }
+            guard var track = fingers[identity] else { return }
+            if track.points.count < 64 {
+                track.points.append(point)
+            }
+            if track.backspace {
+                let steps = Int(((point.x - track.origin.x) / 11).rounded(.towardZero))
+                let delta = steps - track.scrubSteps
+                if delta != 0 {
+                    track.scrubSteps = steps
+                    track.repeated = true
+                    repeatTasks[identity]?.cancel()
+                    forward(.boundary(.scrub(delta)))
+                }
+            }
+            if isStroke(track.points) {
+                surface.hidePopup()
+            }
+            let key = surface.key(at: point)
+            if key?.id != track.keyID {
+                if let previous = track.keyID {
+                    surface.setPressed(previous, pressed: false)
+                }
                 if let key {
                     surface.setPressed(key.id, pressed: true)
                 }
-                var track = FingerTrack(id: nextFinger)
-                nextFinger += 1
                 track.keyID = key?.id
-                track.origin = point
-                track.backspace = key?.kind == .backspace
-                track.points.append(point)
-                fingers[identity] = track
-                if let key, case .letter = key.kind {
-                    surface.showPopup(for: key)
-                    impact.impactOccurred(intensity: 0.55)
-                    impact.prepare()
-                }
-                if track.backspace {
-                    armBackspace(identity)
-                }
-                send(phase, finger: track.id, point: point, key: key)
-            case .move:
-                guard var track = fingers[identity] else { continue }
-                if track.points.count < 64 {
-                    track.points.append(point)
-                }
-                if track.backspace {
-                    let steps = Int(((point.x - track.origin.x) / 11).rounded(.towardZero))
-                    let delta = steps - track.scrubSteps
-                    if delta != 0 {
-                        track.scrubSteps = steps
-                        track.repeated = true
-                        repeatTasks[identity]?.cancel()
-                        forward(.boundary(.scrub(delta)))
-                    }
-                }
-                if isStroke(track.points) {
-                    surface.hidePopup()
-                }
-                let key = surface.key(at: point)
-                if key?.id != track.keyID {
-                    if let previous = track.keyID {
-                        surface.setPressed(previous, pressed: false)
-                    }
-                    if let key {
-                        surface.setPressed(key.id, pressed: true)
-                    }
-                    track.keyID = key?.id
-                }
-                fingers[identity] = track
-                send(phase, finger: track.id, point: point, key: key)
-            case .up, .cancel:
-                guard let track = fingers.removeValue(forKey: identity) else { continue }
-                if let keyID = track.keyID {
-                    surface.setPressed(keyID, pressed: false)
-                }
-                surface.hidePopup()
-                repeatTasks[identity]?.cancel()
-                repeatTasks.removeValue(forKey: identity)
-                let key = surface.key(at: point)
-                if track.repeated {
-                    forward(.suppressLiftDelete)
-                }
-                send(phase, finger: track.id, point: point, key: key)
-                if phase == .up, key?.kind == .nextKeyboard, !isStroke(track.points) {
-                    advanceToNextInputMode()
-                }
+            }
+            fingers[identity] = track
+            send(phase, finger: track.id, point: point, key: key)
+        case .up, .cancel:
+            if fingers[identity] == nil {
+                deliver(.down, touch, surface: surface)
+            }
+            guard let track = fingers.removeValue(forKey: identity) else { return }
+            if let keyID = track.keyID {
+                surface.setPressed(keyID, pressed: false)
+            }
+            surface.hidePopup()
+            repeatTasks[identity]?.cancel()
+            repeatTasks.removeValue(forKey: identity)
+            let key = surface.key(at: point)
+            if track.repeated {
+                forward(.suppressLiftDelete)
+            }
+            send(phase, finger: track.id, point: point, key: key)
+            if phase == .up, key?.kind == .nextKeyboard, !isStroke(track.points) {
+                advanceToNextInputMode()
             }
         }
-        let strokes = fingers.values.map(\.points).filter(isStroke)
-        surface.setTrails(strokes)
+    }
+
+    /// A moving finger must not keep the next touch waiting on a recognizer.
+    private func releaseTouchDelays() {
+        view.isMultipleTouchEnabled = true
+        var cursor: UIView? = view
+        while let current = cursor {
+            for recognizer in current.gestureRecognizers ?? [] {
+                recognizer.delaysTouchesBegan = false
+                recognizer.cancelsTouchesInView = false
+            }
+            cursor = current.superview
+        }
+        for recognizer in view.window?.gestureRecognizers ?? [] {
+            recognizer.delaysTouchesBegan = false
+            recognizer.cancelsTouchesInView = false
+        }
     }
 
     private func armBackspace(_ identity: ObjectIdentifier) {
@@ -271,10 +323,6 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func forward(_ input: EngineInput) {
-        if decodeInFlight {
-            queued.append(input)
-            return
-        }
         let before = engine.observations.count
         present(engine.handle(input))
         let waiting = engine.takePendingDecode() != nil
@@ -309,38 +357,23 @@ final class KeyboardViewController: UIInputViewController {
 
     private func scheduleDecode() {
         guard let request = engine.takePendingDecode() else { return }
-        decodeInFlight = true
         decodeGeneration += 1
         let generation = decodeGeneration
+        let epoch = engine.draftEpoch
+        let previous = decodeTask
         decodeTask = Task {
-            guard !Task.isCancelled else {
-                self.finishCancelledDecode(generation)
-                return
-            }
+            guard !Task.isCancelled else { return }
             let result = await DecoderPool.match(request)
-            guard !Task.isCancelled else {
-                self.finishCancelledDecode(generation)
-                return
-            }
-            guard generation == self.decodeGeneration else { return }
-            let effects = self.engine.resolve(result)
-            self.decodeInFlight = false
+            guard !Task.isCancelled else { return }
+            guard generation == self.decodeGeneration, epoch == self.engine.draftEpoch else { return }
+            let effects = self.engine.resolve(result, epoch: epoch)
             self.present(effects)
             self.scheduleGrace()
-            let pending = self.queued
-            self.queued.removeAll(keepingCapacity: true)
-            for input in pending {
-                self.forward(input)
-            }
             if self.view.window == nil {
                 self.persistLearning()
             }
         }
-    }
-
-    private func finishCancelledDecode(_ generation: Int) {
-        guard generation == decodeGeneration else { return }
-        decodeInFlight = false
+        previous?.cancel()
     }
 
     private func scheduleGrace() {

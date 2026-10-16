@@ -10,7 +10,7 @@ final class KeyboardSurfaceView: UIView {
     private var shift = ShiftState.off
     private(set) var layout: KeyboardLayout
     var onLayout: (KeyboardLayout) -> Void
-    var onTouch: ((TouchPhase, Set<UITouch>) -> Void)?
+    var onTouch: ((TouchPhase, Set<UITouch>, UIEvent?) -> Void)?
     var showsNextKeyboard = true {
         didSet {
             guard oldValue != showsNextKeyboard else { return }
@@ -125,19 +125,19 @@ final class KeyboardSurfaceView: UIView {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        onTouch?(.down, touches)
+        onTouch?(.down, touches, event)
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        onTouch?(.move, touches)
+        onTouch?(.move, touches, event)
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        onTouch?(.up, touches)
+        onTouch?(.up, touches, event)
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        onTouch?(.cancel, touches)
+        onTouch?(.cancel, touches, event)
     }
 
     func key(at point: CGPoint) -> PlacedKey? {

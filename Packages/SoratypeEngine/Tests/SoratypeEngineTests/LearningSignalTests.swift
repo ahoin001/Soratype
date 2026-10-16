@@ -1,3 +1,4 @@
+import Foundation
 import Testing
 @testable import SoratypeEngine
 
@@ -29,5 +30,34 @@ struct LearningSignalTests {
         memory.noteReject("nope")
         #expect(memory.blocklist.contains("nope"))
         #expect(memory.shouldFade("nope"))
+    }
+
+    @Test func aForgottenLearnedWordCanBeRestored() {
+        var memory = LearningMemory()
+        memory.noteAccept("ada", previous: nil, now: 1)
+        memory.noteAccept("ada", previous: nil, now: 2)
+        memory.forget("Ada")
+        #expect(memory.personal["ada"] == nil)
+        #expect(memory.forgotten == ["ada"])
+        memory.allow("ada")
+        #expect(memory.forgotten.isEmpty)
+        #expect(memory.personal["ada"] == 2)
+    }
+
+    @Test func allowingAHiddenWordDoesNotInventAPersonalCount() {
+        var memory = LearningMemory()
+        memory.noteReject("the")
+        memory.allow("the")
+        #expect(memory.blocklist.isEmpty)
+        #expect(memory.personal["the"] == nil)
+        #expect(memory.forgotten.isEmpty)
+    }
+
+    @Test func olderMemoryFilesStillLoad() throws {
+        let data = Data("{}".utf8)
+        let memory = try JSONDecoder().decode(LearningMemory.self, from: data)
+        #expect(memory.forgotten.isEmpty)
+        #expect(memory.forgottenUses.isEmpty)
+        #expect(memory.personal.isEmpty)
     }
 }

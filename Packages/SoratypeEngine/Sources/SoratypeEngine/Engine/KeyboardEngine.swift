@@ -8,6 +8,8 @@ public struct KeyboardEngine: Sendable {
     public var strip: Strip { assistant.strip }
     public var observations: [Observation] { draft }
     public var learning: LearningMemory { memory }
+    /// Bumps whenever the open draft changes. A decode applies only while this still matches the snapshot it searched.
+    public private(set) var draftEpoch = 0
 
     private var layout: KeyboardLayout
     private var lexicon: any Lexicon
@@ -25,6 +27,7 @@ public struct KeyboardEngine: Sendable {
     private var effects: [EngineEffect] = []
     private var pendingRequest: DecodeRequest?
     private var pendingPurpose: PendingPurpose?
+    private var pendingEpoch = 0
     private var lastCommit: CommitRecord?
     private var previousWord: String?
     private var lastSpaceTime: Int?
@@ -92,9 +95,18 @@ public struct KeyboardEngine: Sendable {
         pendingRequest
     }
 
+    /// Applies `result` only when `epoch` is still the draft that was searched.
+    /// A newer letter leaves the pending request of that newer draft alone.
     @discardableResult
-    public mutating func resolve(_ result: DecodeResult) -> [EngineEffect] {
+    public mutating func resolve(_ result: DecodeResult, epoch: Int) -> [EngineEffect] {
         effects.removeAll(keepingCapacity: true)
+        guard epoch == draftEpoch else {
+            if pendingEpoch == epoch {
+                pendingRequest = nil
+                pendingPurpose = nil
+            }
+            return effects
+        }
         let purpose = pendingPurpose
         pendingRequest = nil
         pendingPurpose = nil
@@ -258,6 +270,11 @@ public struct KeyboardEngine: Sendable {
             }
         }
         chunks = rebuilt
+        noteDraft()
+    }
+
+    private mutating func noteDraft() {
+        draftEpoch &+= 1
     }
 
     private mutating func ingestNonLetterLift(_ key: PlacedKey) {
@@ -315,6 +332,7 @@ public struct KeyboardEngine: Sendable {
             adjusted[index].y -= bias.dy
         }
         composer.integrate(adjusted, draft: &draft, chunks: &chunks)
+        noteDraft()
         if phase == .contact, draft.contains(where: { $0.stroke != 0 }) {
             phase = .swipeOpen
         }
@@ -322,6 +340,7 @@ public struct KeyboardEngine: Sendable {
             shift = .off
             effects.append(.shift(.off))
         }
+        showComposing(AimedSpelling.text(from: draft))
         guard decodeNow else { return }
         refreshComposing(allowDecode: true)
     }
@@ -552,6 +571,7 @@ public struct KeyboardEngine: Sendable {
             phase = .idle
             draft.removeAll(keepingCapacity: true)
             chunks.removeAll(keepingCapacity: true)
+            noteDraft()
             return
         }
         let kind: CommitRecord.Kind = word.lowercased() == typed.lowercased() ? .tap : .autocorrect
@@ -566,26 +586,44 @@ public struct KeyboardEngine: Sendable {
                 let fragment = Array(draft.prefix(fragmentCount))
                 let rest = Array(draft.dropFirst(fragmentCount))
                 let fragmentResult = graceResult ?? decode(fragment)
-                graceMerged = false
-                write(
-                    displayWord(fragmentResult),
-                    trailingSpace: true,
-                    kind: .swipe,
-                    aimed: fragmentResult.aimed,
-                    typed: fragmentResult.aimed,
-                    result: fragmentResult,
-                    observations: fragment
-                )
-                phase = .tapOpen
-                draft = rest
-                chunks = [GestureChunk(start: 0, end: rest.count, isStroke: rest.contains { $0.stroke != 0 })]
-                showComposing(AimedSpelling.text(from: rest))
-                return
+                if let word = committableWord(fragmentResult) {
+                    graceMerged = false
+                    write(
+                        word,
+                        trailingSpace: true,
+                        kind: .swipe,
+                        aimed: fragmentResult.aimed,
+                        typed: fragmentResult.aimed,
+                        result: fragmentResult,
+                        observations: fragment
+                    )
+                    phase = .tapOpen
+                    draft = rest
+                    noteDraft()
+                    chunks = [GestureChunk(start: 0, end: rest.count, isStroke: rest.contains { $0.stroke != 0 })]
+                    showComposing(AimedSpelling.text(from: rest))
+                    return
+                }
             }
         }
-        let word = displayWord(result)
-        guard !word.isEmpty else {
-            phase = .idle
+        guard let word = committableWord(result) else {
+            let letters = result.aimed.isEmpty ? AimedSpelling.text(from: draft) : result.aimed
+            guard !letters.isEmpty else {
+                phase = .idle
+                draft.removeAll(keepingCapacity: true)
+                chunks.removeAll(keepingCapacity: true)
+                noteDraft()
+                return
+            }
+            write(
+                letters,
+                trailingSpace: true,
+                kind: .swipe,
+                aimed: letters,
+                typed: letters,
+                result: result,
+                observations: draft
+            )
             return
         }
         write(word, trailingSpace: true, kind: .swipe, aimed: result.aimed, typed: result.aimed, result: result, observations: draft)
@@ -632,7 +670,10 @@ public struct KeyboardEngine: Sendable {
         draft.removeAll(keepingCapacity: true)
         chunks.removeAll(keepingCapacity: true)
         assistant.pinned = nil
-        memory.noteAccept(word, previous: prior, now: now, observations: observations)
+        noteDraft()
+        if shouldRemember(word, observations: observations) {
+            memory.noteAccept(word, previous: prior, now: now, observations: observations)
+        }
         presentLanded(result, committed: word)
         settleCount += 1
     }
@@ -656,6 +697,7 @@ public struct KeyboardEngine: Sendable {
         phase = .idle
         draft.removeAll(keepingCapacity: true)
         chunks.removeAll(keepingCapacity: true)
+        noteDraft()
         graceResult = nil
         memory.noteAccept(word, previous: prior, now: now, observations: observations)
         presentLanded(result, committed: word)
@@ -736,11 +778,13 @@ public struct KeyboardEngine: Sendable {
         if let chunk = chunks.last, chunk.isStroke, chunks.count > 1 {
             draft.removeSubrange(chunk.start..<chunk.end)
             chunks.removeLast()
+            noteDraft()
             refreshComposing(allowDecode: true)
             return
         }
         if let chunk = chunks.last, !chunk.isStroke, chunk.end > chunk.start {
             draft.removeLast()
+            noteDraft()
             if chunk.end - chunk.start == 1 {
                 chunks.removeLast()
             } else if var last = chunks.last {
@@ -757,6 +801,7 @@ public struct KeyboardEngine: Sendable {
         }
         draft.removeAll(keepingCapacity: true)
         chunks.removeAll(keepingCapacity: true)
+        noteDraft()
         closeComposing()
         phase = .idle
         graceResult = nil
@@ -820,6 +865,7 @@ public struct KeyboardEngine: Sendable {
             }
             chunks = [GestureChunk(start: 0, end: draft.count, isStroke: false)]
         }
+        noteDraft()
     }
 
     private mutating func deleteCharacters(_ count: Int) {
@@ -835,6 +881,7 @@ public struct KeyboardEngine: Sendable {
             phase = .idle
             draft.removeAll(keepingCapacity: true)
             chunks.removeAll(keepingCapacity: true)
+            noteDraft()
             if count > 0 {
                 effects.append(.deleteBackward(count))
             }
@@ -1066,6 +1113,7 @@ public struct KeyboardEngine: Sendable {
             phase = .idle
             draft.removeAll(keepingCapacity: true)
             chunks.removeAll(keepingCapacity: true)
+            noteDraft()
             graceResult = nil
             queued.removeAll(keepingCapacity: true)
             lastCommit = nil
@@ -1076,6 +1124,7 @@ public struct KeyboardEngine: Sendable {
             if enabled {
                 phase = .idle
                 draft.removeAll(keepingCapacity: true)
+                noteDraft()
             }
         }
     }
@@ -1161,9 +1210,28 @@ public struct KeyboardEngine: Sendable {
     }
 
     private func displayWord(_ result: DecodeResult) -> String {
-        if let pinned = assistant.pinned { return pinned }
-        if let top = result.top, !top.isEmpty { return top }
+        if let word = committableWord(result) { return word }
         return result.aimed
+    }
+
+    /// A swipe may finish as a lexicon word, a word already learned, or the chip the user pinned.
+    /// The raw aimed fallback is not one of those.
+    private func committableWord(_ result: DecodeResult) -> String? {
+        if let pinned = assistant.pinned, !pinned.isEmpty { return pinned }
+        for reading in result.readings {
+            let key = reading.text.lowercased()
+            if lexicon.contains(key) || (memory.personal[key] ?? 0) >= 2 {
+                return reading.text
+            }
+        }
+        return nil
+    }
+
+    /// A swipe that matched nothing must not become a learned word. Taps the user committed still can.
+    private func shouldRemember(_ word: String, observations: [Observation]) -> Bool {
+        let key = word.lowercased()
+        if lexicon.contains(key) || (memory.personal[key] ?? 0) >= 2 { return true }
+        return !observations.contains { $0.stroke != 0 }
     }
 
     private mutating func splitJoinedDraft(using result: DecodeResult) -> Bool {
@@ -1238,6 +1306,7 @@ public struct KeyboardEngine: Sendable {
     }
 
     private mutating func schedule(_ observations: [Observation], purpose: PendingPurpose) {
+        pendingEpoch = draftEpoch
         pendingRequest = makeRequest(observations)
         pendingPurpose = purpose
     }

@@ -65,6 +65,13 @@
     "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/ChainBeam.swiftdeps",
     "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/ChainBeam.dia"
   },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/Contractions.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/Contractions.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/Contractions.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/Contractions~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/Contractions.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/Contractions.dia"
+  },
   "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeCosts.swift": {
     "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/DecodeCosts.d",
     "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/DecodeCosts.swift.o",

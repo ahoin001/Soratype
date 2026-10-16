@@ -16,12 +16,61 @@
     "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/DecoderTests.swiftdeps",
     "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/DecoderTests.dia"
   },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/ForgivenessTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/ForgivenessTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/ForgivenessTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/ForgivenessTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/ForgivenessTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/ForgivenessTests.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/GestureFieldTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/GestureFieldTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/GestureFieldTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/GestureFieldTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/GestureFieldTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/GestureFieldTests.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LayoutTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LayoutTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LayoutTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LayoutTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LayoutTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LayoutTests.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LearningSignalTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LearningSignalTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LearningSignalTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LearningSignalTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LearningSignalTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LearningSignalTests.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/MixedInputTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/MixedInputTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/MixedInputTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/MixedInputTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/MixedInputTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/MixedInputTests.dia"
+  },
   "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/Script.swift": {
     "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.d",
     "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.swift.o",
     "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script~partial.swiftmodule",
     "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.swiftdeps",
     "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/StripTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/StripTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/StripTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/StripTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/StripTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/StripTests.dia"
+  },
+  "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/SuggestionTests.swift": {
+    "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/SuggestionTests.d",
+    "object": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/SuggestionTests.swift.o",
+    "swiftmodule": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/SuggestionTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/SuggestionTests.swiftdeps",
+    "diagnostics": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/SuggestionTests.dia"
   },
   "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/WorkedExampleTests.swift": {
     "dependencies": "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/WorkedExampleTests.d",

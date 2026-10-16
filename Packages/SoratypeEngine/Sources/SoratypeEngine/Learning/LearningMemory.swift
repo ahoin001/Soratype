@@ -79,6 +79,9 @@ public struct LearningMemory: Sendable, Equatable, Codable {
     public var rejections: [String: String]
     public var refusals: [Refusal]
     public var blocklist: [String]
+    public var forgotten: [String]
+    /// Personal counts cleared by forget, so allow can put a learned word back on the suggestion floor.
+    public var forgottenUses: [String: Int]
     public var personal: [String: Int]
     public var leftBias: Bias
     public var rightBias: Bias
@@ -92,6 +95,8 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         rejections: [String: String] = [:],
         refusals: [Refusal] = [],
         blocklist: [String] = [],
+        forgotten: [String] = [],
+        forgottenUses: [String: Int] = [:],
         personal: [String: Int] = [:],
         leftBias: Bias = .zero,
         rightBias: Bias = .zero,
@@ -104,6 +109,8 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         self.rejections = rejections
         self.refusals = refusals
         self.blocklist = blocklist
+        self.forgotten = forgotten
+        self.forgottenUses = forgottenUses
         self.personal = personal
         self.leftBias = leftBias
         self.rightBias = rightBias
@@ -112,7 +119,7 @@ public struct LearningMemory: Sendable, Equatable, Codable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case habits, pairs, prototypes, rejections, refusals, blocklist, personal
+        case habits, pairs, prototypes, rejections, refusals, blocklist, forgotten, forgottenUses, personal
         case leftBias, rightBias, pendingRefusal, impressions
     }
 
@@ -125,6 +132,8 @@ public struct LearningMemory: Sendable, Equatable, Codable {
             rejections: try container.decodeIfPresent([String: String].self, forKey: .rejections) ?? [:],
             refusals: try container.decodeIfPresent([Refusal].self, forKey: .refusals) ?? [],
             blocklist: try container.decodeIfPresent([String].self, forKey: .blocklist) ?? [],
+            forgotten: try container.decodeIfPresent([String].self, forKey: .forgotten) ?? [],
+            forgottenUses: try container.decodeIfPresent([String: Int].self, forKey: .forgottenUses) ?? [:],
             personal: try container.decodeIfPresent([String: Int].self, forKey: .personal) ?? [:],
             leftBias: try container.decodeIfPresent(Bias.self, forKey: .leftBias) ?? .zero,
             rightBias: try container.decodeIfPresent(Bias.self, forKey: .rightBias) ?? .zero,
@@ -141,6 +150,8 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         try container.encode(rejections, forKey: .rejections)
         try container.encode(refusals, forKey: .refusals)
         try container.encode(blocklist, forKey: .blocklist)
+        try container.encode(forgotten, forKey: .forgotten)
+        try container.encode(forgottenUses, forKey: .forgottenUses)
         try container.encode(personal, forKey: .personal)
         try container.encode(leftBias, forKey: .leftBias)
         try container.encode(rightBias, forKey: .rightBias)
@@ -320,11 +331,16 @@ public struct LearningMemory: Sendable, Equatable, Codable {
     public mutating func allow(_ word: String) {
         let key = word.lowercased()
         blocklist.removeAll { $0 == key }
+        forgotten.removeAll { $0 == key }
         impressions[key] = 0
+        guard forgottenUses[key] != nil else { return }
+        forgottenUses[key] = nil
+        personal[key] = max(personal[key] ?? 0, 2)
     }
 
     public mutating func forget(_ word: String) {
         let key = word.lowercased()
+        let uses = personal[key] ?? 0
         habits[key] = nil
         personal[key] = nil
         impressions[key] = nil
@@ -332,6 +348,15 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         blocklist.removeAll { $0 == key }
         prototypes.removeAll { $0.word == key }
         pairs = pairs.filter { !$0.key.hasSuffix("\t" + key) && !$0.key.hasPrefix(key + "\t") }
+        if uses > 0 {
+            forgottenUses[key] = uses
+        }
+        guard !forgotten.contains(key) else { return }
+        forgotten.append(key)
+        if forgotten.count > 300 {
+            let removed = forgotten.removeFirst()
+            forgottenUses[removed] = nil
+        }
     }
 
     public mutating func noteBias(thumb: Thumb, dx: Double, dy: Double, limit: Double) {

@@ -5,9 +5,9 @@ struct CompanionView: View {
     @State private var settings = SettingsStore().load()
     @State private var status = LexiconInstaller.current()
     @State private var saveNote: String?
-    @State private var learnedCount = 0
+    @State private var learned: [String] = []
     @State private var blocked: [String] = []
-    @State private var forgetWord = ""
+    @State private var forgotten: [String] = []
 
     var body: some View {
         NavigationStack {
@@ -16,7 +16,7 @@ struct CompanionView: View {
                     CompanionHomeHeader()
                     CompanionGlance(
                         wordCount: status.wordCount,
-                        learnedCount: learnedCount,
+                        learnedCount: learned.count,
                         hiddenCount: blocked.count
                     )
                     CompanionHomeLinks(learnedLine: learnedLine)
@@ -36,11 +36,11 @@ struct CompanionView: View {
                 case .words:
                     LexiconSection(
                         status: status,
-                        learnedCount: learnedCount,
+                        learned: learned,
                         blocked: blocked,
-                        forgetWord: $forgetWord,
+                        forgotten: forgotten,
                         rebuild: { status = LexiconInstaller.rebuild() },
-                        forget: forgetLearnedWord,
+                        forget: forgetWord,
                         allow: allowWord,
                         resetLearning: resetLearning
                     )
@@ -63,17 +63,18 @@ struct CompanionView: View {
     }
 
     private var learnedLine: String {
-        switch learnedCount {
+        switch learned.count {
         case 0: "Nothing learned yet"
         case 1: "1 word learned"
-        default: "\(learnedCount.formatted()) words learned"
+        default: "\(learned.count.formatted()) words learned"
         }
     }
 
     private func refreshLearnedCount() {
         let memory = SharedFiles.memoryURL().map { MemoryStore(url: $0).load() } ?? .empty
-        learnedCount = memory.personal.count
+        learned = memory.personal.keys.sorted()
         blocked = memory.blocklist
+        forgotten = memory.forgotten
     }
 
     private func allowWord(_ word: String) {
@@ -84,13 +85,12 @@ struct CompanionView: View {
         refreshLearnedCount()
     }
 
-    private func forgetLearnedWord() {
-        let word = forgetWord.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !word.isEmpty, let url = SharedFiles.memoryURL() else { return }
+    private func forgetWord(_ word: String) {
+        let trimmed = word.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, let url = SharedFiles.memoryURL() else { return }
         var memory = MemoryStore(url: url).load()
-        memory.forget(word)
+        memory.forget(trimmed)
         try? MemoryStore(url: url).save(memory)
-        forgetWord = ""
         refreshLearnedCount()
     }
 

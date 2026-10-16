@@ -64,6 +64,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/Contractions.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeCosts.swift"
         },
         {
@@ -296,6 +300,7 @@
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/AlignmentPathMatcher.swift.o",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/BeamSearch.swift.o",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/ChainBeam.swift.o",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/Contractions.swift.o",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/DecodeCosts.swift.o",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/DecodeRequest.swift.o",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/DecodeResult.swift.o",
@@ -446,6 +451,10 @@
         {
           "kind" : "file",
           "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/ChainBeam.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/Contractions.swift.o"
         },
         {
           "kind" : "file",
@@ -675,6 +684,7 @@
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/AlignmentPathMatcher.swift",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/BeamSearch.swift",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/ChainBeam.swift",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/Contractions.swift",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeCosts.swift",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeRequest.swift",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeResult.swift",
@@ -848,7 +858,35 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/ForgivenessTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/GestureFieldTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LayoutTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LearningSignalTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/MixedInputTests.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/Script.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/StripTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/SuggestionTests.swift"
         },
         {
           "kind" : "file",
@@ -873,7 +911,14 @@
       "objects" : [
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/BoundaryTests.swift.o",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/DecoderTests.swift.o",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/ForgivenessTests.swift.o",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/GestureFieldTests.swift.o",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LayoutTests.swift.o",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LearningSignalTests.swift.o",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/MixedInputTests.swift.o",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.swift.o",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/StripTests.swift.o",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/SuggestionTests.swift.o",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/WorkedExampleTests.swift.o"
       ],
       "otherArguments" : [
@@ -946,7 +991,35 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/ForgivenessTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/GestureFieldTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LayoutTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LearningSignalTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/MixedInputTests.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/StripTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/SuggestionTests.swift.o"
         },
         {
           "kind" : "file",
@@ -961,7 +1034,14 @@
       "sources" : [
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/BoundaryTests.swift",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/DecoderTests.swift",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/ForgivenessTests.swift",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/GestureFieldTests.swift",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LayoutTests.swift",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LearningSignalTests.swift",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/MixedInputTests.swift",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/Script.swift",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/StripTests.swift",
+        "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/SuggestionTests.swift",
         "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/WorkedExampleTests.swift"
       ],
       "tempsPath" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build",
@@ -988,6 +1068,7 @@
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/AlignmentPathMatcher.swift",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/BeamSearch.swift",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/ChainBeam.swift",
+      "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/Contractions.swift",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeCosts.swift",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeRequest.swift",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/DecodeResult.swift",
@@ -1178,7 +1259,14 @@
       "-c",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/BoundaryTests.swift",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/DecoderTests.swift",
+      "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/ForgivenessTests.swift",
+      "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/GestureFieldTests.swift",
+      "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LayoutTests.swift",
+      "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LearningSignalTests.swift",
+      "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/MixedInputTests.swift",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/Script.swift",
+      "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/StripTests.swift",
+      "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/SuggestionTests.swift",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/WorkedExampleTests.swift",
       "-I",
       "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/Modules",
@@ -1318,6 +1406,10 @@
         {
           "kind" : "file",
           "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/ChainBeam.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Sources/SoratypeEngine/Decode/Contractions.swift"
         },
         {
           "kind" : "file",
@@ -1589,6 +1681,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/Contractions.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngine.build/DecodeCosts.swift.o"
         },
         {
@@ -1817,7 +1913,35 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/ForgivenessTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/GestureFieldTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LayoutTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/LearningSignalTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/MixedInputTests.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/Script.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/StripTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/.build/x86_64-apple-macosx/debug/SoratypeEngineTests.build/SuggestionTests.swift.o"
         },
         {
           "kind" : "file",
@@ -1843,7 +1967,35 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/ForgivenessTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/GestureFieldTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LayoutTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/LearningSignalTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/MixedInputTests.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/Script.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/StripTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/alexanderhoinville/Desktop/Soratype/Packages/SoratypeEngine/Tests/SoratypeEngineTests/SuggestionTests.swift"
         },
         {
           "kind" : "file",

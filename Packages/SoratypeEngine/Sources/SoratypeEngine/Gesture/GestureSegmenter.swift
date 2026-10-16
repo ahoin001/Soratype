@@ -291,8 +291,13 @@ public struct GestureSegmenter: Sendable {
         return count
     }
 
+    /// A second contact on a thumb that is already drawing. A planted finger has not chosen a stroke yet.
     private func sameThumbAlreadyStroking(_ thumb: Thumb, excluding index: Int) -> Bool {
-        for cursor in 0..<5 where cursor != index && slots[cursor].occupied && slots[cursor].thumb == thumb && !slots[cursor].extra {
+        for cursor in 0..<5 where cursor != index
+            && slots[cursor].occupied
+            && slots[cursor].isStroke
+            && slots[cursor].thumb == thumb
+            && !slots[cursor].extra {
             return true
         }
         return false
