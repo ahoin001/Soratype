@@ -46,8 +46,10 @@ public enum AlignmentPathMatcher {
             return DecodeResult.aimedOnly(aimed, exhausted: searched.exhausted || ContinuousClock().now >= deadline)
         }
         readings = preferAimed(readings, aimed: aimed, request: request)
+        readings = preferContraction(readings, aimed: aimed, request: request)
         readings = applyRejection(readings, aimed: aimed, request: request)
         readings = leadingTapSkip(readings, request: request, aimed: aimed)
+        readings = preferUndemoted(readings, request: request)
         let unsure = readings.count > 1 && abs(readings[0].score - readings[1].score) <= request.costs.unsureMargin
         return DecodeResult(
             readings: Array(readings.prefix(8)),
@@ -108,6 +110,37 @@ public enum AlignmentPathMatcher {
         } else {
             readings.insert(Reading(text: aimed, score: aimedScore, aimed: true), at: 0)
         }
+        return readings
+    }
+
+    /// A curated contraction leads its bare spelling. `preferAimed` must not put `dont` back in front of `don't`.
+    private static func preferContraction(_ readings: [Reading], aimed: String, request: DecodeRequest) -> [Reading] {
+        guard let display = Contractions.display(matching: aimed) else { return readings }
+        let key = display.lowercased()
+        let known = request.lexicon.contains(key) || (request.learning.personal[key] ?? 0) >= 3
+        guard known, !request.lexicon.isOffensive(key) else { return readings }
+        var readings = readings
+        let floor = readings.first?.score ?? 0
+        if let index = readings.firstIndex(where: { $0.text.lowercased() == key }) {
+            let chosen = readings.remove(at: index)
+            readings.insert(Reading(text: display, score: max(chosen.score, floor + 0.05), aimed: chosen.aimed), at: 0)
+        } else {
+            readings.insert(Reading(text: display, score: floor + 0.05, aimed: false), at: 0)
+        }
+        return readings
+    }
+
+    /// A word deleted on this trace shape yields to another real reading.
+    private static func preferUndemoted(_ readings: [Reading], request: DecodeRequest) -> [Reading] {
+        guard let top = readings.first else { return readings }
+        let penalty = request.learning.habits[top.text.lowercased()] ?? 0
+        guard penalty < 0 else { return readings }
+        guard let index = readings.dropFirst().firstIndex(where: {
+            (request.learning.habits[$0.text.lowercased()] ?? 0) >= 0
+        }) else { return readings }
+        var readings = readings
+        let chosen = readings.remove(at: index)
+        readings.insert(chosen, at: 0)
         return readings
     }
 

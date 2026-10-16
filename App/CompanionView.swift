@@ -12,8 +12,28 @@ struct CompanionView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 28) {
+                VStack(spacing: 24) {
+                    CompanionHomeHeader()
+                    CompanionGlance(
+                        wordCount: status.wordCount,
+                        learnedCount: learnedCount,
+                        hiddenCount: blocked.count
+                    )
+                    CompanionHomeLinks(learnedLine: learnedLine)
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 32)
+                .frame(maxWidth: 640)
+                .frame(maxWidth: .infinity)
+            }
+            .scrollIndicators(.hidden)
+            .companionScreen()
+            .toolbar(.hidden, for: .navigationBar)
+            .navigationDestination(for: CompanionDestination.self) { destination in
+                switch destination {
+                case .enable:
                     InstructionsSection()
+                case .words:
                     LexiconSection(
                         status: status,
                         learnedCount: learnedCount,
@@ -24,18 +44,10 @@ struct CompanionView: View {
                         allow: allowWord,
                         resetLearning: resetLearning
                     )
+                case .typing:
                     TypingFlagsSection(settings: $settings, saveNote: saveNote)
                 }
-                .padding(20)
-                .frame(maxWidth: 640, alignment: .leading)
-                .frame(maxWidth: .infinity)
             }
-            .background(CompanionChrome.air.ignoresSafeArea())
-            .navigationTitle("Soratype")
-            .toolbarBackground(CompanionChrome.air, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .font(.system(.body, design: .rounded))
-            .foregroundStyle(CompanionChrome.ink)
         }
         .tint(CompanionChrome.seal)
         .preferredColorScheme(.light)
@@ -48,6 +60,14 @@ struct CompanionView: View {
             }
         }
         .onAppear(perform: refreshLearnedCount)
+    }
+
+    private var learnedLine: String {
+        switch learnedCount {
+        case 0: "Nothing learned yet"
+        case 1: "1 word learned"
+        default: "\(learnedCount.formatted()) words learned"
+        }
     }
 
     private func refreshLearnedCount() {

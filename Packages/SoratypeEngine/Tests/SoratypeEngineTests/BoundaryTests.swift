@@ -29,7 +29,8 @@ struct BoundaryTests {
         #expect(script.text == "pill ")
         script.backspace()
         #expect(script.text.isEmpty)
-        #expect(script.engine.strip.chips.contains { $0.text.lowercased() == "pil" })
+        #expect(script.engine.strip.chips.contains { $0.text.lowercased() == "pill" })
+        #expect(script.engine.strip.chips.contains { $0.text.lowercased() == "pil" } == false)
     }
 
     @Test func reopenAimedLettersIsASetting() {

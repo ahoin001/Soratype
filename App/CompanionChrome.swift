@@ -2,19 +2,20 @@ import SwiftUI
 
 /// Cool air, warm paper, one apricot note. Keep in step with KeyboardChrome.
 enum CompanionChrome {
+    static let mist = Color(red: 0.925, green: 0.949, blue: 0.976)
     static let air = Color(red: 0.851, green: 0.894, blue: 0.949)
     static let porcelain = Color(red: 1, green: 0.984, blue: 0.965)
+    static let cloud = Color(red: 0.761, green: 0.827, blue: 0.910)
     static let ink = Color(red: 0.071, green: 0.102, blue: 0.149)
     static let haze = Color(red: 0.235, green: 0.314, blue: 0.392)
     static let seal = Color(red: 0.910, green: 0.416, blue: 0.200)
     static let caution = Color(red: 0.659, green: 0.165, blue: 0.149)
-}
+    static let rim = Color.white.opacity(0.92)
+    static let shadow = ink.opacity(0.16)
 
-extension View {
-    func companionCard() -> some View {
-        padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(CompanionChrome.porcelain, in: .rect(cornerRadius: 14))
-            .shadow(color: CompanionChrome.ink.opacity(0.08), radius: 10, y: 4)
+    static let background = LinearGradient(colors: [mist, air], startPoint: .top, endPoint: .bottom)
+
+    static func font(_ style: Font.TextStyle, weight: Font.Weight = .regular) -> Font {
+        .system(style, design: .rounded).weight(weight)
     }
 }

@@ -18,6 +18,51 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         public var word: String
         public var aimed: String
         public var at: Int
+        public var start: UInt8
+        public var end: UInt8
+        public var length: Int
+
+        public init(
+            word: String,
+            aimed: String,
+            at: Int,
+            start: UInt8 = 0,
+            end: UInt8 = 0,
+            length: Int = 0
+        ) {
+            self.word = word
+            self.aimed = aimed
+            self.at = at
+            self.start = start
+            self.end = end
+            self.length = length
+        }
+
+        private enum CodingKeys: String, CodingKey {
+            case word, aimed, at, start, end, length
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.init(
+                word: try container.decode(String.self, forKey: .word),
+                aimed: try container.decode(String.self, forKey: .aimed),
+                at: try container.decode(Int.self, forKey: .at),
+                start: try container.decodeIfPresent(UInt8.self, forKey: .start) ?? 0,
+                end: try container.decodeIfPresent(UInt8.self, forKey: .end) ?? 0,
+                length: try container.decodeIfPresent(Int.self, forKey: .length) ?? 0
+            )
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(word, forKey: .word)
+            try container.encode(aimed, forKey: .aimed)
+            try container.encode(at, forKey: .at)
+            try container.encode(start, forKey: .start)
+            try container.encode(end, forKey: .end)
+            try container.encode(length, forKey: .length)
+        }
     }
 
     public struct Bias: Sendable, Equatable, Codable {
@@ -149,6 +194,9 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         for refusal in refusals {
             demoted[refusal.word] = 1.5
         }
+        if let pending = pendingRefusal, now - pending.at <= 10_000, matches(pending, observations: observations) {
+            demoted[pending.word] = 1.5
+        }
         for (word, penalty) in demoted {
             habitBonus[word] = (habitBonus[word] ?? 0) - penalty
         }
@@ -173,7 +221,12 @@ public struct LearningMemory: Sendable, Equatable, Codable {
             .map(String.init)
     }
 
-    public mutating func noteAccept(_ word: String, previous: String?, now: Int) {
+    public mutating func noteAccept(
+        _ word: String,
+        previous: String?,
+        now: Int,
+        observations: [Observation] = []
+    ) {
         guard !Self.skipsLearning(word) else { return }
         let key = word.lowercased()
         impressions[key] = 0
@@ -189,17 +242,43 @@ public struct LearningMemory: Sendable, Equatable, Codable {
             pairs[pair, default: 0] += 1
             trim(&pairs, limit: 400) { $0.value }
         }
-        if let pending = pendingRefusal, now - pending.at <= 10_000, pending.word != key {
-            var refusal = pending
-            refusal.word = pending.word
-            refusals.append(Refusal(word: pending.word, aimed: pending.aimed, at: now))
+        if let pending = pendingRefusal, now - pending.at <= 10_000, pending.word != key,
+           matches(pending, observations: observations) {
+            refusals.append(Refusal(
+                word: pending.word,
+                aimed: pending.aimed,
+                at: now,
+                start: pending.start,
+                end: pending.end,
+                length: pending.length
+            ))
             if refusals.count > 12 { refusals.removeFirst(refusals.count - 12) }
         }
         pendingRefusal = nil
     }
 
-    public mutating func noteSwipeRemoval(word: String, aimed: String, now: Int) {
-        pendingRefusal = Refusal(word: word.lowercased(), aimed: aimed.lowercased(), at: now)
+    public mutating func noteSwipeRemoval(
+        word: String,
+        aimed: String,
+        now: Int,
+        observations: [Observation] = []
+    ) {
+        let kept = AimedSpelling.observations(observations)
+        pendingRefusal = Refusal(
+            word: word.lowercased(),
+            aimed: aimed.lowercased(),
+            at: now,
+            start: kept.first?.letter ?? 0,
+            end: kept.last?.letter ?? 0,
+            length: kept.count
+        )
+    }
+
+    private func matches(_ pending: Refusal, observations: [Observation]) -> Bool {
+        guard pending.length > 0 else { return false }
+        let aimed = AimedSpelling.observations(observations)
+        guard let first = aimed.first?.letter, let last = aimed.last?.letter else { return false }
+        return first == pending.start && last == pending.end && aimed.count == pending.length
     }
 
     public mutating func noteChoice(word: String, aimed: String, observations: [Observation]) {

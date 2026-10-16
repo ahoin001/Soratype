@@ -16,16 +16,20 @@ struct StripTests {
         #expect((script.engine.learning.pairs["the\tof"] ?? 0) >= 1)
     }
 
-    @Test func correctionTapReplacesAndRecordsTheAccept() {
-        var script = Script()
-        script.swipe("pil")
-        script.elapseGrace()
-        #expect(script.text == "pill ")
-        let aimed = script.engine.strip.chips.firstIndex { $0.role == .aimed && $0.text.lowercased() == "pil" }
-        #expect(aimed != nil)
-        script.engine.handle(.acceptChip(aimed!))
-        #expect(script.text == "pil ")
-        #expect((script.engine.learning.personal["pil"] ?? 0) >= 1)
+    @Test func correctionTapReplacesAndRecordsTheAccept() throws {
+        var script = Script(words: ["dont", "don't", "know"], followers: ["don't": ["know"]])
+        script.tap("dont")
+        script.space()
+        #expect(script.text == "don't ")
+        let alternative = script.engine.strip.chips.firstIndex {
+            $0.role == .alternative || $0.role == .aimed
+        }
+        let chip = try #require(alternative)
+        let word = script.engine.strip.chips[chip].text
+        script.engine.handle(.acceptChip(chip))
+        #expect(word.lowercased() == "dont")
+        #expect(script.text == "dont ")
+        #expect((script.engine.learning.personal["dont"] ?? 0) >= 1)
     }
 
     @Test func threeIgnoresHideTheNextWord() {
@@ -37,8 +41,18 @@ struct StripTests {
         #expect(script.engine.strip.chips.contains { $0.role == .follower && $0.text.lowercased() == "of" })
         script.tap("the")
         script.space()
-        #expect(script.engine.strip.chips.contains { $0.role == .follower } == false)
+        #expect(script.engine.strip.chips.contains { $0.role == .follower && $0.text.lowercased() == "of" } == false)
         #expect(script.engine.strip.chips.contains { $0.role == .context && $0.text.lowercased() == "the" })
+    }
+
+    @Test func aFadedChipYieldsItsSlotToTheNextReading() {
+        var script = Script(words: Fixture.words + ["of", "to", "and"], followers: ["the": ["of", "to", "and"]])
+        for _ in 0..<4 {
+            script.tap("the")
+            script.space()
+        }
+        #expect(script.engine.strip.chips.contains { $0.text.lowercased() == "of" } == false)
+        #expect(script.engine.strip.chips.contains { $0.text.lowercased() == "and" })
     }
 
     @Test func longPressBlocksWithoutUntypingAndAnExactAimStillDecodes() {

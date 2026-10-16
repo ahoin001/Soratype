@@ -2,22 +2,31 @@ import SwiftUI
 import UIKit
 
 struct InstructionsSection: View {
+    @Environment(\.openURL) private var openURL
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Enable")
-                .font(.system(.title3, design: .rounded, weight: .semibold))
-            VStack(alignment: .leading, spacing: 8) {
-                Text("1. Open Settings")
-                Text("2. General, then Keyboard, then Keyboards")
-                Text("3. Add Soratype")
+        CompanionScreen(title: "Enable") {
+            CompanionCard {
+                VStack(alignment: .leading, spacing: 16) {
+                    CompanionSetupStep(number: 1, title: "Open Settings, then General")
+                    CompanionSetupStep(number: 2, title: "Keyboard, then Keyboards")
+                    CompanionSetupStep(number: 3, title: "Add Soratype")
+                    Label {
+                        Text("Soratype stays on this iPhone. Nothing you type is uploaded.")
+                    } icon: {
+                        Image(systemName: "lock.shield")
+                    }
+                    .font(CompanionChrome.font(.footnote))
+                    .foregroundStyle(CompanionChrome.haze)
+                    Button("Open Settings", action: openSettings)
+                        .buttonStyle(.seal)
+                }
             }
-            .foregroundStyle(CompanionChrome.haze)
-            Button("Open Settings") {
-                guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-                UIApplication.shared.open(url)
-            }
-            .buttonStyle(SealButtonStyle())
         }
-        .companionCard()
+    }
+
+    private func openSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        openURL(url)
     }
 }

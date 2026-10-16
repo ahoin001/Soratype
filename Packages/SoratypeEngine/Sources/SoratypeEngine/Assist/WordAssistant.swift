@@ -15,50 +15,40 @@ public struct WordAssistant: Sendable {
         strip = .empty
     }
 
-    public mutating func preview(_ result: DecodeResult, now: Int, costs: DecodeCosts) -> Strip {
-        let readings = result.readings
-        let choice = stickyLeader(readings, now: now, margin: costs.unsureMargin, hold: costs.stickyLeaderMilliseconds)
+    public mutating func preview(
+        _ result: DecodeResult,
+        now: Int,
+        costs: DecodeCosts,
+        extras: [Chip] = []
+    ) -> Strip {
+        let near = readingsNearTheLeader(result.readings)
+        let choice = stickyLeader(near, now: now, margin: costs.unsureMargin, hold: costs.stickyLeaderMilliseconds)
         var chips: [Chip] = []
         if let pinned {
             chips.append(Chip(text: pinned, role: .leader))
-            for reading in readings where reading.text.lowercased() != pinned.lowercased() && chips.count < 3 {
+            for reading in near where reading.text.lowercased() != pinned.lowercased() {
                 chips.append(Chip(text: reading.text, role: .alternative))
             }
-        } else {
-            for reading in readings.prefix(3) {
-                let role: ChipRole = reading.text == choice ? .leader : .alternative
-                chips.append(Chip(text: reading.text, role: role))
+        } else if let primary = near.first(where: { $0.text.lowercased() == choice.lowercased() }) ?? near.first {
+            chips.append(Chip(text: primary.text, role: .leader))
+            for reading in near where reading.text.lowercased() != primary.text.lowercased() {
+                chips.append(Chip(text: reading.text, role: .alternative))
             }
         }
-        let close = readings.count > 1 && abs(readings[0].score - readings[1].score) <= costs.unsureMargin
-        let highlighted = close || chips.isEmpty ? nil : chips.firstIndex { $0.role == .leader }
-        strip = Strip(chips: chips, highlighted: highlighted, preview: true)
-        return strip
+        chips.append(contentsOf: extras)
+        let close = near.count > 1 && abs(near[0].score - near[1].score) <= costs.unsureMargin
+        return assemble(chips, preview: true, highlighted: close ? nil : chips.firstIndex { $0.role == .leader })
     }
 
-    public mutating func landed(_ result: DecodeResult, aimed: String, suffix: String?, follower: String?) -> Strip {
+    public mutating func landed(committed: String, extras: [Chip]) -> Strip {
         pinned = nil
-        let committed = result.top ?? aimed
         leader = committed
         var chips: [Chip] = []
-        if let follower, !follower.isEmpty, follower.lowercased() != committed.lowercased() {
-            chips.append(Chip(text: follower, role: .follower))
-        }
-        if !aimed.isEmpty, aimed.lowercased() != committed.lowercased(), aimed.lowercased() != follower?.lowercased() {
-            chips.append(Chip(text: aimed, role: .aimed))
-        }
-        if let suffix, suffix.lowercased() != committed.lowercased(), chips.count < 3 {
-            chips.append(Chip(text: suffix, role: .suffix))
-        }
         if !committed.isEmpty {
             chips.append(Chip(text: committed, role: .context))
         }
-        strip = Strip(
-            chips: chips,
-            highlighted: chips.firstIndex { $0.role == .follower },
-            preview: false
-        )
-        return strip
+        chips.append(contentsOf: extras)
+        return assemble(chips, preview: false, highlighted: chips.isEmpty ? nil : 0)
     }
 
     /// The next stroke has started. Drop the previous next-word bar before its decode arrives.
@@ -81,8 +71,27 @@ public struct WordAssistant: Sendable {
             if chips.count == 3 { break }
         }
         leader = chips.first?.text ?? ""
-        strip = Strip(chips: chips, highlighted: chips.isEmpty ? nil : 0, preview: false)
+        return assemble(chips, preview: false, highlighted: chips.isEmpty ? nil : 0)
+    }
+
+    /// Keeps the first three distinct chips. Later candidates fill slots the row would otherwise leave empty.
+    private mutating func assemble(_ incoming: [Chip], preview: Bool, highlighted: Int?) -> Strip {
+        var chips: [Chip] = []
+        var seen = Set<String>()
+        for chip in incoming {
+            let key = chip.text.lowercased()
+            guard !chip.text.isEmpty, seen.insert(key).inserted else { continue }
+            chips.append(chip)
+            if chips.count == 3 { break }
+        }
+        let index = highlighted.flatMap { chips.indices.contains($0) ? $0 : nil }
+        strip = Strip(chips: chips, highlighted: index, preview: preview)
         return strip
+    }
+
+    private func readingsNearTheLeader(_ readings: [Reading]) -> [Reading] {
+        guard let top = readings.first else { return [] }
+        return readings.filter { top.score - $0.score <= 4 }
     }
 
     public mutating func promote(_ index: Int) -> String? {

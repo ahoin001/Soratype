@@ -6,29 +6,60 @@ struct TypingFlagsSection: View {
     var saveNote: String?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("Typing")
-                .font(.system(.title3, design: .rounded, weight: .semibold))
-            Toggle("Allow a short gap between thumbs", isOn: $settings.handoffGraceEnabled)
-            Toggle("Backspace removes the whole swipe", isOn: swipeRemoved)
-            Toggle("Double space types a period", isOn: $settings.doubleSpacePeriod)
-            Toggle("Finish the other thumb before space or delete", isOn: $settings.queueBoundaryUntilLift)
-            DisclosureGroup("Advanced") {
-                Stepper(value: $settings.handoffGraceMilliseconds, in: 40...150, step: 5) {
-                    Text("Gap \(settings.handoffGraceMilliseconds) ms")
-                        .monospacedDigit()
+        CompanionScreen(title: "Typing") {
+            CompanionCard(padding: 16) {
+                VStack(alignment: .leading, spacing: 12) {
+                    CompanionToggleRow(
+                        systemImage: "hand.raised.fingers.spread",
+                        title: "A short gap between thumbs",
+                        detail: "The second thumb can still join the word.",
+                        isOn: $settings.handoffGraceEnabled
+                    )
+                    if settings.handoffGraceEnabled {
+                        CompanionDivider()
+                        Stepper(value: $settings.handoffGraceMilliseconds, in: 40...150, step: 5) {
+                            CompanionRowText(
+                                title: "Gap",
+                                detail: "\(settings.handoffGraceMilliseconds) ms before the word settles"
+                            )
+                        }
+                        .padding(.leading, 48)
+                        .padding(.vertical, 4)
+                    }
+                    CompanionDivider()
+                    CompanionToggleRow(
+                        systemImage: "delete.left",
+                        title: "Backspace removes the whole swipe",
+                        detail: settings.backspaceMode == .removeWordAndSpace
+                            ? "The first delete takes the swipe and its space."
+                            : "The first delete reopens the letters you aimed.",
+                        isOn: swipeRemoved
+                    )
+                    CompanionDivider()
+                    CompanionToggleRow(
+                        systemImage: "circle.fill",
+                        title: "Double space types a period",
+                        detail: "The second space, tapped quickly, ends the sentence.",
+                        isOn: $settings.doubleSpacePeriod
+                    )
+                    CompanionDivider()
+                    CompanionToggleRow(
+                        systemImage: "arrow.left.and.right",
+                        title: "Wait for the other thumb",
+                        detail: "Space and delete hold until that thumb lifts.",
+                        isOn: $settings.queueBoundaryUntilLift
+                    )
                 }
-                .disabled(!settings.handoffGraceEnabled)
+                .animation(CompanionMotion.gentle, value: settings.handoffGraceEnabled)
             }
-            .foregroundStyle(CompanionChrome.haze)
             if let saveNote {
                 Text(saveNote)
-                    .font(.footnote)
+                    .font(CompanionChrome.font(.footnote, weight: .medium))
                     .foregroundStyle(CompanionChrome.caution)
                     .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, 6)
             }
         }
-        .companionCard()
     }
 
     private var swipeRemoved: Binding<Bool> {

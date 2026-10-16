@@ -341,8 +341,7 @@ public struct KeyboardEngine: Sendable {
             if allowDecode, decodesInline {
                 let result = decode(draft)
                 if splitJoinedDraft(using: result) { return }
-                let strip = assistant.preview(result, now: now, costs: costs)
-                emitStrip(strip)
+                presentPreview(result, at: now)
             }
         }
     }
@@ -400,8 +399,7 @@ public struct KeyboardEngine: Sendable {
         graceResult = result
         phase = .grace(deadline: time + settings.handoffGraceMilliseconds)
         showComposing(displayWord(result))
-        let preview = assistant.preview(result, now: time, costs: costs)
-        emitStrip(preview)
+        presentPreview(result, at: time)
     }
 
     private mutating func ingestBoundary(_ boundary: Boundary) {
@@ -634,14 +632,8 @@ public struct KeyboardEngine: Sendable {
         draft.removeAll(keepingCapacity: true)
         chunks.removeAll(keepingCapacity: true)
         assistant.pinned = nil
-        memory.noteAccept(word, previous: prior, now: now)
-        let landed = assistant.landed(
-            result,
-            aimed: offer(aimed, besides: word) ?? word,
-            suffix: suffixChip(for: word),
-            follower: nextWord(after: word)
-        )
-        emitStrip(landed)
+        memory.noteAccept(word, previous: prior, now: now, observations: observations)
+        presentLanded(result, committed: word)
         settleCount += 1
     }
 
@@ -665,14 +657,8 @@ public struct KeyboardEngine: Sendable {
         draft.removeAll(keepingCapacity: true)
         chunks.removeAll(keepingCapacity: true)
         graceResult = nil
-        memory.noteAccept(word, previous: prior, now: now)
-        let landed = assistant.landed(
-            result,
-            aimed: offer(stem, besides: word) ?? word,
-            suffix: nil,
-            follower: nextWord(after: word)
-        )
-        emitStrip(landed)
+        memory.noteAccept(word, previous: prior, now: now, observations: observations)
+        presentLanded(result, committed: word)
         settleCount += 1
     }
 
@@ -704,11 +690,16 @@ public struct KeyboardEngine: Sendable {
                 let removed = commit
                 let count = commit.word.count + (commit.trailingSpace ? 1 : 0)
                 deleteCharacters(count)
-                memory.noteSwipeRemoval(word: commit.word, aimed: commit.aimed, now: now)
+                memory.noteSwipeRemoval(
+                    word: commit.word,
+                    aimed: commit.aimed,
+                    now: now,
+                    observations: commit.observations
+                )
                 previousWord = nil
                 lastCommit = nil
                 repeatUnit = .word
-                emitStrip(assistant.undoOffer([removed.word] + removed.alternatives + [removed.aimed]))
+                emitStrip(assistant.undoOffer(undoWords(from: removed)))
             }
         case .autocorrect:
             let count = commit.word.count + (commit.trailingSpace ? 1 : 0)
@@ -800,7 +791,7 @@ public struct KeyboardEngine: Sendable {
     private mutating func previewRestoredWord() {
         guard !draft.isEmpty else { return }
         if decodesInline {
-            emitStrip(assistant.preview(decode(draft), now: now, costs: costs))
+            presentPreview(decode(draft), at: now)
         } else {
             schedule(draft, purpose: .preview)
             emitStrip(assistant.beginDecision())
@@ -937,7 +928,7 @@ public struct KeyboardEngine: Sendable {
                 unsure: false,
                 budgetExhausted: false
             )
-            emitStrip(assistant.landed(result, aimed: joined, suffix: nil, follower: nextWord(after: joined)))
+            presentLanded(result, committed: joined)
         case .leader, .alternative, .aimed:
             guard let commit = lastCommit else {
                 insertWord(chip.text, previous: nil)
@@ -949,7 +940,7 @@ public struct KeyboardEngine: Sendable {
             field.insert(replacement + " ")
             effects.append(.replaceTail(delete: deleteCount, insert: replacement + " "))
             memory.noteChoice(word: replacement, aimed: commit.aimed, observations: commit.observations)
-            memory.noteAccept(replacement, previous: nil, now: now)
+            memory.noteAccept(replacement, previous: nil, now: now, observations: commit.observations)
             lastCommit = CommitRecord(
                 kind: .strip, word: replacement, aimed: commit.aimed, typed: commit.typed,
                 trailingSpace: true, alternatives: commit.alternatives, stem: nil, suffix: nil,
@@ -962,12 +953,7 @@ public struct KeyboardEngine: Sendable {
                 unsure: false,
                 budgetExhausted: false
             )
-            emitStrip(assistant.landed(
-                result,
-                aimed: offer(commit.aimed, besides: replacement) ?? replacement,
-                suffix: suffixChip(for: replacement),
-                follower: nextWord(after: replacement)
-            ))
+            presentLanded(result, committed: replacement)
         }
     }
 
@@ -993,24 +979,81 @@ public struct KeyboardEngine: Sendable {
         lastSpaceTime = now
         phase = .idle
         memory.noteAccept(word, previous: previous, now: now)
-        emitStrip(assistant.landed(result, aimed: word, suffix: suffixChip(for: word), follower: nextWord(after: word)))
+        presentLanded(result, committed: word)
         settleCount += 1
     }
 
-    private func nextWord(after word: String) -> String? {
-        var candidates: [String] = []
-        if let learned = memory.follower(of: word) {
-            candidates.append(learned)
-        }
-        candidates.append(contentsOf: lexicon.followers(of: word.lowercased()))
-        return candidates.first { offer($0, besides: word) != nil }
+    private mutating func presentPreview(_ result: DecodeResult, at time: Int) {
+        let shown = readable(result)
+        let leader = shown.readings.first?.text ?? ""
+        emitStrip(assistant.preview(shown, now: time, costs: costs, extras: tailCandidates(for: leader)))
     }
 
-    private func offer(_ word: String, besides committed: String) -> String? {
+    private mutating func presentLanded(_ result: DecodeResult, committed: String) {
+        emitStrip(assistant.landed(committed: committed, extras: suggestionExtras(around: committed, result: result)))
+    }
+
+    private func readable(_ result: DecodeResult) -> DecodeResult {
+        let readings = result.readings.filter { isSuggestion($0.text) }
+        return DecodeResult(
+            readings: readings,
+            aimed: result.aimed,
+            unsure: result.unsure,
+            budgetExhausted: result.budgetExhausted
+        )
+    }
+
+    private func suggestionExtras(around committed: String, result: DecodeResult) -> [Chip] {
+        let shown = result.readings.filter { isSuggestion($0.text) }
+        let top = shown.first?.score ?? 0
+        var chips: [Chip] = []
+        for reading in shown {
+            if reading.text.lowercased() == committed.lowercased() { continue }
+            if top - reading.score > 4 { continue }
+            let role: ChipRole = reading.aimed ? .aimed : .alternative
+            chips.append(Chip(text: reading.text, role: role))
+        }
+        chips.append(contentsOf: tailCandidates(for: committed))
+        return chips
+    }
+
+    private func tailCandidates(for word: String) -> [Chip] {
+        guard !word.isEmpty else { return [] }
+        var chips: [Chip] = []
+        if let suffix = suffixChip(for: word) {
+            chips.append(Chip(text: suffix, role: .suffix))
+        }
+        var seen = Set<String>()
+        for follower in followerList(of: word) {
+            let key = follower.lowercased()
+            guard seen.insert(key).inserted, isSuggestion(follower), key != word.lowercased() else { continue }
+            chips.append(Chip(text: follower, role: .follower))
+        }
+        return chips
+    }
+
+    private func followerList(of word: String) -> [String] {
+        var list: [String] = []
+        if let learned = memory.follower(of: word) {
+            list.append(learned)
+        }
+        list.append(contentsOf: lexicon.followers(of: word.lowercased()))
+        return list
+    }
+
+    private func isSuggestion(_ word: String) -> Bool {
         let key = word.lowercased()
-        guard !word.isEmpty, key != committed.lowercased() else { return nil }
-        guard !memory.blocklist.contains(key), !memory.shouldFade(key) else { return nil }
-        return word
+        guard !key.isEmpty, !memory.blocklist.contains(key), !memory.shouldFade(key) else { return false }
+        if lexicon.contains(key) { return true }
+        return (memory.personal[key] ?? 0) >= 2
+    }
+
+    private func undoWords(from commit: CommitRecord) -> [String] {
+        var words = [commit.word]
+        for alternative in commit.alternatives where isSuggestion(alternative) {
+            words.append(alternative)
+        }
+        return words
     }
 
     private mutating func ingestHost(_ event: HostEvent) {
@@ -1114,8 +1157,7 @@ public struct KeyboardEngine: Sendable {
         if draft.contains(where: { $0.stroke != 0 }) {
             showComposing(word)
         }
-        let preview = assistant.preview(result, now: now, costs: costs)
-        emitStrip(preview)
+        presentPreview(result, at: now)
     }
 
     private func displayWord(_ result: DecodeResult) -> String {
@@ -1159,16 +1201,6 @@ public struct KeyboardEngine: Sendable {
 
     private mutating func emitStrip(_ strip: Strip) {
         var shown = strip
-        shown.chips.removeAll { chip in
-            switch chip.role {
-            case .context:
-                return false
-            case .leader where shown.preview:
-                return false
-            default:
-                return memory.blocklist.contains(chip.text.lowercased()) || memory.shouldFade(chip.text)
-            }
-        }
         if !shown.preview {
             for chip in shown.chips where chip.role != .context {
                 memory.noteImpression(chip.text)
