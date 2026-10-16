@@ -93,7 +93,7 @@ final class SuggestionStripView: UIView {
             } else {
                 slot = ChipSlot()
                 slot.addAction(UIAction { [weak self, weak slot] _ in
-                    guard let self, let slot else { return }
+                    guard let self, let slot, slot.role != .context else { return }
                     self.onChip(slot.index)
                 }, for: .touchUpInside)
                 slot.onLongPress = { [weak self] index in
@@ -103,12 +103,12 @@ final class SuggestionStripView: UIView {
                 insertSubview(slot, belowSubview: sheen)
             }
             slot.index = index
+            slot.role = chip.role
             slot.accessibilityLabel = chip.text
+            slot.accessibilityTraits = chip.role == .context ? .staticText : .button
             slot.title.text = chip.text
-            slot.title.font = KeyboardChrome.roundedFont(
-                size: 16,
-                weight: chip.role == .leader ? .semibold : .regular
-            )
+            slot.transform = .identity
+            slot.collapsing = false
             next.append(slot)
         }
         for slot in next {
@@ -116,7 +116,22 @@ final class SuggestionStripView: UIView {
                 self?.onReject(index)
             }
         }
-        unused.forEach { $0.removeFromSuperview() }
+        unused.forEach { slot in
+            guard !UIAccessibility.isReduceMotionEnabled else {
+                slot.removeFromSuperview()
+                return
+            }
+            UIView.animate(
+                withDuration: 0.14,
+                delay: 0,
+                options: [.curveEaseOut, .beginFromCurrentState]
+            ) {
+                slot.alpha = 0
+                slot.transform = CGAffineTransform(scaleX: 0.92, y: 0.92)
+            } completion: { _ in
+                slot.removeFromSuperview()
+            }
+        }
         slots = next
     }
 
@@ -131,10 +146,25 @@ final class SuggestionStripView: UIView {
         for (index, slot) in slots.enumerated() {
             guard shown.chips.indices.contains(index) else { continue }
             let chip = shown.chips[index]
-            let leader = chip.role == .leader
-            let quiet = shown.highlighted == nil && leader
-            slot.backgroundColor = leader ? KeyboardChrome.seal.withAlphaComponent(quiet ? 0.75 : 1) : UIColor.white.withAlphaComponent(0.12)
-            slot.title.textColor = leader ? KeyboardChrome.ink : KeyboardChrome.troughText
+            let quiet = shown.highlighted == nil && chip.role == .leader
+            switch chip.role {
+            case .follower:
+                slot.backgroundColor = KeyboardChrome.seal
+                slot.title.textColor = KeyboardChrome.ink
+                slot.title.font = KeyboardChrome.roundedFont(size: 16, weight: .semibold)
+            case .leader where shown.preview:
+                slot.backgroundColor = KeyboardChrome.seal.withAlphaComponent(quiet ? 0.75 : 1)
+                slot.title.textColor = KeyboardChrome.ink
+                slot.title.font = KeyboardChrome.roundedFont(size: 16, weight: .semibold)
+            case .context:
+                slot.backgroundColor = .clear
+                slot.title.textColor = KeyboardChrome.troughText.withAlphaComponent(0.55)
+                slot.title.font = KeyboardChrome.roundedFont(size: 15, weight: .regular)
+            default:
+                slot.backgroundColor = UIColor.white.withAlphaComponent(0.12)
+                slot.title.textColor = KeyboardChrome.troughText
+                slot.title.font = KeyboardChrome.roundedFont(size: 16, weight: .regular)
+            }
         }
     }
 
@@ -147,14 +177,15 @@ final class SuggestionStripView: UIView {
         }
         let gap: CGFloat = 6
         let usable = area.width - gap * CGFloat(count - 1)
-        let leaderIndex = shown.chips.firstIndex { $0.role == .leader } ?? 0
-        let leaderWidth = usable * 0.5
-        let otherWidth = (usable - leaderWidth) / CGFloat(count - 1)
+        let emphasis = shown.chips.firstIndex { $0.role == .follower }
+            ?? shown.chips.firstIndex { $0.role == .leader }
+        let emphasisWidth = emphasis == nil ? usable / CGFloat(count) : usable * 0.5
+        let otherWidth = emphasis == nil ? emphasisWidth : (usable - emphasisWidth) / CGFloat(max(count - 1, 1))
         var x = area.minX
         var frames: [CGRect] = []
         frames.reserveCapacity(count)
         for index in 0..<count {
-            let width = index == leaderIndex ? leaderWidth : otherWidth
+            let width = index == emphasis ? emphasisWidth : otherWidth
             frames.append(CGRect(x: x, y: area.minY, width: width, height: area.height))
             x += width + gap
         }
@@ -165,6 +196,8 @@ final class SuggestionStripView: UIView {
 private final class ChipSlot: UIControl {
     var chipID = ""
     var index = 0
+    var role = ChipRole.alternative
+    var collapsing = false
     let title = UILabel()
     private let press = UIView()
 
@@ -193,8 +226,20 @@ private final class ChipSlot: UIControl {
     var onLongPress: ((Int) -> Void)?
 
     @objc private func held(_ gesture: UILongPressGestureRecognizer) {
-        guard gesture.state == .began else { return }
-        onLongPress?(index)
+        guard gesture.state == .began, !collapsing else { return }
+        collapsing = true
+        let index = self.index
+        let finish = { self.onLongPress?(index) }
+        guard !UIAccessibility.isReduceMotionEnabled else {
+            finish()
+            return
+        }
+        UIView.animate(withDuration: 0.16, delay: 0, options: [.curveEaseIn, .beginFromCurrentState]) {
+            self.transform = CGAffineTransform(scaleX: 0.02, y: 0.02)
+            self.alpha = 0
+        } completion: { _ in
+            finish()
+        }
     }
 
     @available(*, unavailable)

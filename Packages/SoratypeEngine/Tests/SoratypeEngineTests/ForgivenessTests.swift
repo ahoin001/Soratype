@@ -17,6 +17,8 @@ struct ForgivenessTests {
         var observations = taps("xhello", layout: layout)
         observations[0].stroke = 0
         observations[0].kind = .tap
+        observations[0].lifted = true
+        observations[0].liftTime = 20
         for index in observations.indices.dropFirst() {
             observations[index].stroke = 1
             observations[index].kind = .anchor
@@ -28,6 +30,25 @@ struct ForgivenessTests {
         ))
         #expect(result.top?.lowercased() == "hello")
         #expect(result.readings.contains { $0.text.lowercased() == "xhello" })
+    }
+
+    @Test func aTapStillHeldIsNotDroppedForTheStroke() {
+        let layout = KeyboardLayout.letters(fitting: Size(width: 390, height: 220))
+        let lexicon = MemoryLexicon(wordsInFrequencyOrder: ["hello", "the"])
+        var observations = taps("xhello", layout: layout)
+        observations[0].stroke = 0
+        observations[0].kind = .tap
+        observations[0].lifted = false
+        for index in observations.indices.dropFirst() {
+            observations[index].stroke = 1
+            observations[index].kind = .anchor
+        }
+        let result = AlignmentPathMatcher.match(DecodeRequest(
+            observations: observations,
+            centers: layout.centers,
+            lexicon: lexicon
+        ))
+        #expect(result.readings.contains { $0.text.lowercased() == "xhello" } == false)
     }
 
     @Test func anExtraTapDropsAStrokeNominationThatItDoesNotFinish() {

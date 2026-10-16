@@ -13,6 +13,10 @@ public struct Observation: Sendable, Equatable {
     public var centered: Bool
     public var stroke: UInt8
     public var otherThumbDown: Bool
+    /// The finger has lifted. A tap still down is not a finished stray tap.
+    public var lifted: Bool
+    /// Lift timestamp. Zero until the finger lifts. Stroke letters compare against it.
+    public var liftTime: Int
 
     public init(
         letter: UInt8,
@@ -28,7 +32,9 @@ public struct Observation: Sendable, Equatable {
         keyHeight: Double,
         centered: Bool,
         stroke: UInt8,
-        otherThumbDown: Bool
+        otherThumbDown: Bool,
+        lifted: Bool = false,
+        liftTime: Int = 0
     ) {
         self.letter = letter
         self.shifted = shifted
@@ -44,6 +50,8 @@ public struct Observation: Sendable, Equatable {
         self.centered = centered
         self.stroke = stroke
         self.otherThumbDown = otherThumbDown
+        self.lifted = lifted
+        self.liftTime = liftTime
     }
 
     public static let placeholder = Observation(
@@ -60,7 +68,9 @@ public struct Observation: Sendable, Equatable {
         keyHeight: 1,
         centered: true,
         stroke: 0,
-        otherThumbDown: false
+        otherThumbDown: false,
+        lifted: false,
+        liftTime: 0
     )
 
     public var point: Point { Point(x: x, y: y) }

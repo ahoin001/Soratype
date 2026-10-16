@@ -69,6 +69,49 @@ struct WorkedExampleTests {
         #expect(script.text == "stay ")
     }
 
+    @Test func plantedLetterShowsBeforeTheFingerMoves() {
+        var script = Script()
+        script.down("s", finger: 2)
+        script.wait(40)
+        script.tap("ta", finger: 1)
+        #expect(script.text.contains("s"))
+        #expect(script.text.hasSuffix(" ") == false)
+        script.move("y", finger: 2)
+        let planted = script.engine.observations.filter { $0.letter == LetterByte.byte("s") }
+        #expect(planted.count == 1)
+        #expect(planted.first?.kind == .pin)
+        script.up(2)
+        script.elapseGrace()
+        #expect(script.text == "stay ")
+    }
+
+    @Test func plantedLetterStaysAfterALongHold() {
+        var script = Script()
+        script.down("s", finger: 2)
+        script.wait(600)
+        script.tap("ta", finger: 1)
+        script.move("y", finger: 2)
+        let planted = script.engine.observations.filter { $0.letter == LetterByte.byte("s") }
+        #expect(planted.count == 1)
+        #expect(planted.first?.kind == .pin)
+        script.up(2)
+        script.elapseGrace()
+        #expect(script.text == "stay ")
+    }
+
+    @Test func plantedLetterWithoutTravelStaysOpenUntilSpace() {
+        var script = Script()
+        script.down("s", finger: 2)
+        script.wait(40)
+        script.tap("tay", finger: 1)
+        script.up(2)
+        #expect(script.engine.phase == .tapOpen)
+        #expect(script.text.contains("s"))
+        #expect(script.text.hasSuffix(" ") == false)
+        script.space()
+        #expect(script.text == "stay ")
+    }
+
     @Test func quitMixesATapASwipeAndATap() {
         var script = Script()
         script.tap("q", finger: 2)

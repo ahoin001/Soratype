@@ -3,9 +3,11 @@ import SwiftUI
 struct LexiconSection: View {
     let status: LexiconStatus
     let learnedCount: Int
+    let blocked: [String]
     @Binding var forgetWord: String
     let rebuild: () -> Void
     let forget: () -> Void
+    let allow: (String) -> Void
     let resetLearning: () -> Void
 
     var body: some View {
@@ -19,6 +21,19 @@ struct LexiconSection: View {
                 .fixedSize(horizontal: false, vertical: true)
             Text("\(learnedCount.formatted()) words learned from your typing")
                 .monospacedDigit()
+            if !blocked.isEmpty {
+                Text("Hidden words")
+                    .font(.system(.body, design: .rounded, weight: .semibold))
+                ForEach(blocked, id: \.self) { word in
+                    HStack {
+                        Text(word)
+                        Spacer()
+                        Button("Allow") { allow(word) }
+                            .font(.system(.body, design: .rounded))
+                            .foregroundStyle(CompanionChrome.haze)
+                    }
+                }
+            }
             TextField("Word to forget", text: $forgetWord)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()

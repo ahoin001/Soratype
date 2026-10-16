@@ -7,7 +7,7 @@ struct BoundaryTests {
         script.tap("h")
         script.down("e", finger: 2)
         script.space()
-        #expect(script.text == "h")
+        #expect(script.text == "he")
         script.up(2)
         #expect(script.text == "he ")
     }

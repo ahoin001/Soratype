@@ -238,6 +238,12 @@ public struct LearningMemory: Sendable, Equatable, Codable {
         }
     }
 
+    public mutating func allow(_ word: String) {
+        let key = word.lowercased()
+        blocklist.removeAll { $0 == key }
+        impressions[key] = 0
+    }
+
     public mutating func forget(_ word: String) {
         let key = word.lowercased()
         habits[key] = nil

@@ -38,7 +38,10 @@ public struct GestureSegmenter: Sendable {
             extra: extra
         )
         activeCount += 1
-        return []
+        guard traces[index].observationCount > 0 else { return [] }
+        traces[index].published = 1
+        noteTypedAround(excludingFinger: sample.finger)
+        return [traces[index].observations[0]]
     }
 
     public mutating func move(_ sample: TouchSample, key: PlacedKey?, otherThumbDown: Bool) -> [Observation] {
@@ -57,6 +60,9 @@ public struct GestureSegmenter: Sendable {
         if startedStroke {
             strokeSerial &+= 1
             if strokeSerial == 0 { strokeSerial = 1 }
+        }
+        if !published.isEmpty {
+            noteTypedAround(excludingFinger: sample.finger)
         }
         return published
     }
@@ -91,6 +97,9 @@ public struct GestureSegmenter: Sendable {
             cancelled: cancelled,
             otherThumbDown: otherThumbDown
         )
+        if !published.isEmpty {
+            noteTypedAround(excludingFinger: slots[index].finger)
+        }
         clear(index)
         return published
     }
@@ -184,7 +193,10 @@ public struct GestureSegmenter: Sendable {
         cancelled: Bool,
         otherThumbDown: Bool
     ) -> [Observation] {
-        if cancelled, !slot.isStroke { return [] }
+        if cancelled, !slot.isStroke {
+            guard trace.published > 0, trace.observationCount > 0 else { return [] }
+            return [trace.observations[0]]
+        }
         guard slot.nonLetter == nil, trace.observationCount > 0 else { return [] }
         if !slot.isStroke {
             return [liftedTap(&slot, trace: &trace, at: sample.time.milliseconds, otherThumbDown: otherThumbDown)]
@@ -217,6 +229,8 @@ public struct GestureSegmenter: Sendable {
         }
         trace.observations[0].time = slot.downTime
         trace.observations[0].otherThumbDown = otherThumbDown
+        trace.observations[0].lifted = true
+        trace.observations[0].liftTime = time
         return trace.observations[0]
     }
 
@@ -284,6 +298,17 @@ public struct GestureSegmenter: Sendable {
         return false
     }
 
+    /// Another finger published a letter while this one was still planted.
+    /// Same-side keys still count: thumb identity follows the key, not the hand.
+    private mutating func noteTypedAround(excludingFinger finger: FingerID) {
+        for index in 0..<5 where slots[index].occupied
+            && slots[index].finger != finger
+            && !slots[index].isStroke
+            && !slots[index].extra {
+            slots[index].overlapped = true
+        }
+    }
+
     private static func considerStroke(
         _ slot: inout Slot,
         trace: inout Trace,
@@ -297,11 +322,12 @@ public struct GestureSegmenter: Sendable {
         slot.strokeID = nextStrokeID
         guard trace.observationCount > 0 else { return true }
         let held = sample.time.milliseconds - slot.downTime
-        trace.observations[0].kind = held >= GestureThresholds.pinMilliseconds ? .pin : .anchor
+        let pinned = slot.overlapped || held >= GestureThresholds.pinMilliseconds
+        trace.observations[0].kind = pinned ? .pin : .anchor
         trace.observations[0].stroke = nextStrokeID
         trace.observations[0].otherThumbDown = otherThumbDown
+        published.append(trace.observations[0])
         if trace.published == 0 {
-            published.append(trace.observations[0])
             trace.published = 1
         }
         slot.visitStamped = true
@@ -477,7 +503,8 @@ public struct GestureSegmenter: Sendable {
         guard trace.observationCount > 0 else { return }
         let last = trace.observationCount - 1
         let held = time - slot.lastKeyTime
-        if held >= GestureThresholds.restMilliseconds, otherThumbDown {
+        let protectsStart = slot.isStroke && last == 0
+        if held >= GestureThresholds.restMilliseconds, otherThumbDown, !protectsStart {
             trace.observations[last].kind = .rest
         } else if held >= GestureThresholds.pinMilliseconds, trace.observations[last].kind != .anchor {
             trace.observations[last].kind = .pin
@@ -542,6 +569,7 @@ public struct GestureSegmenter: Sendable {
         var lastKeyTime = 0
         var shifted = false
         var otherThumbDown = false
+        var overlapped = false
         var nonLetter: KeyKind?
         var visitKey: PlacedKey?
         var visitEntered = 0

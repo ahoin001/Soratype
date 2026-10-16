@@ -4,12 +4,13 @@ public enum ChipRole: Sendable, Equatable {
     case aimed
     case suffix
     case follower
+    case context
 }
 
 public struct Chip: Sendable, Equatable, Identifiable {
     public var text: String
     public var role: ChipRole
-    public var id: String { "\(role).\(text)" }
+    public var id: String { text.lowercased() }
 
     public init(text: String, role: ChipRole) {
         self.text = text

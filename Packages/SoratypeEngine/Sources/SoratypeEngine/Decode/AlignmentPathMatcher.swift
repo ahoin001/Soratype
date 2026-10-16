@@ -61,8 +61,8 @@ public enum AlignmentPathMatcher {
         var best: [String: Reading] = [:]
         for candidate in candidates {
             let key = candidate.lowercase
-            if request.learning.blocked.contains(key) { continue }
             let aimedHit = key == aimed.lowercased()
+            if request.learning.blocked.contains(key), !aimedHit { continue }
             if request.lexicon.isOffensive(key), !aimedHit { continue }
             let uses = request.learning.personal[key] ?? 0
             let known = request.lexicon.contains(key) || uses >= 3
@@ -125,11 +125,13 @@ public enum AlignmentPathMatcher {
     }
 
     /// A stray first tap must not hide a confident stroke word. Both readings stay.
+    /// The tap has to be finished and earliest by time. A letter still held, or a tap that lands during that hold, stays.
     private static func leadingTapSkip(_ readings: [Reading], request: DecodeRequest, aimed: String) -> [Reading] {
-        let observations = request.observations
-        guard let first = observations.first, first.kind == .tap, first.stroke == 0 else { return readings }
-        let rest = observations.dropFirst()
-        guard !rest.isEmpty, rest.allSatisfy({ $0.stroke != 0 }) else { return readings }
+        let ordered = request.observations.sorted { $0.time < $1.time }
+        guard let first = ordered.first, first.kind == .tap, first.stroke == 0, first.lifted else { return readings }
+        let rest = ordered.dropFirst()
+        guard let strokeID = rest.first?.stroke, strokeID != 0 else { return readings }
+        guard rest.allSatisfy({ $0.stroke == strokeID && $0.time > first.liftTime }) else { return readings }
         let strokeWord = AimedSpelling.text(from: Array(rest))
         let key = strokeWord.lowercased()
         guard request.lexicon.contains(key), !request.lexicon.isOffensive(key) else { return readings }

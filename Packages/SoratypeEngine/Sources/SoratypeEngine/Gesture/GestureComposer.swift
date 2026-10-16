@@ -8,6 +8,20 @@ public struct GestureComposer: Sendable {
         chunks: inout [GestureChunk]
     ) {
         for var observation in incoming {
+            if let index = draft.lastIndex(where: {
+                $0.stroke == 0 && $0.thumb == observation.thumb && $0.time == observation.time
+            }) {
+                let becameStroke = observation.stroke != 0
+                draft[index] = observation
+                if becameStroke, let chunkIndex = chunks.firstIndex(where: { $0.start <= index && index < $0.end }) {
+                    var chunk = chunks[chunkIndex]
+                    if chunk.end - chunk.start == 1 {
+                        chunk.isStroke = true
+                        chunks[chunkIndex] = chunk
+                    }
+                }
+                continue
+            }
             if draft.contains(where: { existing in
                 existing.letter == observation.letter
                     && existing.thumb != observation.thumb

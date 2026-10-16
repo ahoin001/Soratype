@@ -6,6 +6,7 @@ struct CompanionView: View {
     @State private var status = LexiconInstaller.current()
     @State private var saveNote: String?
     @State private var learnedCount = 0
+    @State private var blocked: [String] = []
     @State private var forgetWord = ""
 
     var body: some View {
@@ -16,9 +17,11 @@ struct CompanionView: View {
                     LexiconSection(
                         status: status,
                         learnedCount: learnedCount,
+                        blocked: blocked,
                         forgetWord: $forgetWord,
                         rebuild: { status = LexiconInstaller.rebuild() },
                         forget: forgetLearnedWord,
+                        allow: allowWord,
                         resetLearning: resetLearning
                     )
                     TypingFlagsSection(settings: $settings, saveNote: saveNote)
@@ -48,7 +51,17 @@ struct CompanionView: View {
     }
 
     private func refreshLearnedCount() {
-        learnedCount = SharedFiles.memoryURL().map { MemoryStore(url: $0).load().personal.count } ?? 0
+        let memory = SharedFiles.memoryURL().map { MemoryStore(url: $0).load() } ?? .empty
+        learnedCount = memory.personal.count
+        blocked = memory.blocklist
+    }
+
+    private func allowWord(_ word: String) {
+        guard let url = SharedFiles.memoryURL() else { return }
+        var memory = MemoryStore(url: url).load()
+        memory.allow(word)
+        try? MemoryStore(url: url).save(memory)
+        refreshLearnedCount()
     }
 
     private func forgetLearnedWord() {

@@ -38,23 +38,49 @@ public struct WordAssistant: Sendable {
 
     public mutating func landed(_ result: DecodeResult, aimed: String, suffix: String?, follower: String?) -> Strip {
         pinned = nil
-        leader = result.top ?? aimed
+        let committed = result.top ?? aimed
+        leader = committed
         var chips: [Chip] = []
-        if let top = result.top {
-            chips.append(Chip(text: top, role: .leader))
-        }
-        if !aimed.isEmpty, aimed.lowercased() != (result.top ?? "").lowercased(), chips.count < 3 {
-            chips.append(Chip(text: aimed, role: .aimed))
-        }
-        if let suffix, chips.count < 3 {
-            chips.append(Chip(text: suffix, role: .suffix))
-        }
-        for reading in result.readings.dropFirst() where chips.count < 3 {
-            chips.append(Chip(text: reading.text, role: .alternative))
-        }
-        if let follower, chips.count < 3, follower.lowercased() != (result.top ?? "").lowercased() {
+        if let follower, !follower.isEmpty, follower.lowercased() != committed.lowercased() {
             chips.append(Chip(text: follower, role: .follower))
         }
+        if !aimed.isEmpty, aimed.lowercased() != committed.lowercased(), aimed.lowercased() != follower?.lowercased() {
+            chips.append(Chip(text: aimed, role: .aimed))
+        }
+        if let suffix, suffix.lowercased() != committed.lowercased(), chips.count < 3 {
+            chips.append(Chip(text: suffix, role: .suffix))
+        }
+        if !committed.isEmpty {
+            chips.append(Chip(text: committed, role: .context))
+        }
+        strip = Strip(
+            chips: chips,
+            highlighted: chips.firstIndex { $0.role == .follower },
+            preview: false
+        )
+        return strip
+    }
+
+    /// The next stroke has started. Drop the previous next-word bar before its decode arrives.
+    public mutating func beginDecision() -> Strip {
+        pinned = nil
+        pending = nil
+        strip = Strip(preview: true)
+        return strip
+    }
+
+    /// The deleted word and the other readings, so a tap can put one back.
+    public mutating func undoOffer(_ words: [String]) -> Strip {
+        pinned = nil
+        var seen = Set<String>()
+        var chips: [Chip] = []
+        for raw in words {
+            let key = raw.lowercased()
+            guard !raw.isEmpty, seen.insert(key).inserted else { continue }
+            chips.append(Chip(text: raw, role: chips.isEmpty ? .follower : .alternative))
+            if chips.count == 3 { break }
+        }
+        leader = chips.first?.text ?? ""
         strip = Strip(chips: chips, highlighted: chips.isEmpty ? nil : 0, preview: false)
         return strip
     }
@@ -62,7 +88,7 @@ public struct WordAssistant: Sendable {
     public mutating func promote(_ index: Int) -> String? {
         guard strip.chips.indices.contains(index) else { return nil }
         let chip = strip.chips[index]
-        guard chip.role != .suffix, chip.role != .follower else { return nil }
+        guard chip.role != .suffix, chip.role != .follower, chip.role != .context else { return nil }
         pinned = chip.text
         leader = chip.text
         var chips = strip.chips

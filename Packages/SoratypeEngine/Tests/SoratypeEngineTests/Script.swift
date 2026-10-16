@@ -6,12 +6,18 @@ struct Script {
     var layout: KeyboardLayout
     var time = 0
 
-    init(words: [String] = Fixture.words, settings: EngineSettings = .default) {
+    init(
+        words: [String] = Fixture.words,
+        followers: [String: [String]] = [:],
+        memory: LearningMemory = .empty,
+        settings: EngineSettings = .default
+    ) {
         layout = KeyboardLayout.letters(fitting: Size(width: 390, height: 220))
         engine = KeyboardEngine(
-            lexicon: MemoryLexicon(wordsInFrequencyOrder: words),
+            lexicon: MemoryLexicon(wordsInFrequencyOrder: words, followers: followers),
             layout: layout,
-            settings: settings
+            settings: settings,
+            memory: memory
         )
     }
 
