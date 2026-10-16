@@ -57,7 +57,7 @@ final class SuggestionStripView: UIView {
             self.layoutSlots()
             self.styleSlots()
             self.wash.alpha = washAlpha
-            for slot in self.slots {
+            for slot in self.slots where !slot.isHiding {
                 slot.alpha = 1
             }
         }
@@ -92,29 +92,25 @@ final class SuggestionStripView: UIView {
                 slot = unused.remove(at: match)
             } else {
                 slot = ChipSlot()
-                slot.addAction(UIAction { [weak self, weak slot] _ in
-                    guard let self, let slot, slot.role != .context else { return }
-                    self.onChip(slot.index)
-                }, for: .touchUpInside)
-                slot.onLongPress = { [weak self] index in
-                    self?.onReject(index)
-                }
                 slot.chipID = chip.id
                 insertSubview(slot, belowSubview: sheen)
             }
-            slot.index = index
-            slot.role = chip.role
-            slot.accessibilityLabel = chip.text
-            slot.accessibilityTraits = chip.role == .context ? .staticText : .button
-            slot.title.text = chip.text
-            slot.transform = .identity
-            slot.collapsing = false
-            next.append(slot)
-        }
-        for slot in next {
-            slot.onLongPress = { [weak self] index in
+            slot.onTap = { [weak self] index in
+                self?.onChip(index)
+            }
+            slot.onHide = { [weak self] index in
                 self?.onReject(index)
             }
+            slot.index = index
+            slot.role = chip.role
+            slot.accessibilityTraits = chip.role == .context ? .staticText : .button
+            slot.accessibilityHint = chip.role == .context ? nil : "Tap to use. Hold to hide."
+            slot.showWord(chip.text)
+            if !slot.isHolding {
+                slot.accessibilityLabel = chip.text
+                slot.transform = .identity
+            }
+            next.append(slot)
         }
         unused.forEach { slot in
             guard !UIAccessibility.isReduceMotionEnabled else {
@@ -147,24 +143,26 @@ final class SuggestionStripView: UIView {
             guard shown.chips.indices.contains(index) else { continue }
             let chip = shown.chips[index]
             let quiet = shown.highlighted == nil && chip.role == .leader
+            let color: UIColor
             switch chip.role {
             case .follower:
                 slot.backgroundColor = KeyboardChrome.seal
-                slot.title.textColor = KeyboardChrome.ink
+                color = KeyboardChrome.ink
                 slot.title.font = KeyboardChrome.roundedFont(size: 16, weight: .semibold)
             case .leader where shown.preview:
                 slot.backgroundColor = KeyboardChrome.seal.withAlphaComponent(quiet ? 0.75 : 1)
-                slot.title.textColor = KeyboardChrome.ink
+                color = KeyboardChrome.ink
                 slot.title.font = KeyboardChrome.roundedFont(size: 16, weight: .semibold)
             case .context:
                 slot.backgroundColor = .clear
-                slot.title.textColor = KeyboardChrome.troughText.withAlphaComponent(0.55)
+                color = KeyboardChrome.troughText.withAlphaComponent(0.55)
                 slot.title.font = KeyboardChrome.roundedFont(size: 15, weight: .regular)
             default:
                 slot.backgroundColor = UIColor.white.withAlphaComponent(0.12)
-                slot.title.textColor = KeyboardChrome.troughText
+                color = KeyboardChrome.troughText
                 slot.title.font = KeyboardChrome.roundedFont(size: 16, weight: .regular)
             }
+            slot.applyTitleColor(color)
         }
     }
 
@@ -197,41 +195,130 @@ private final class ChipSlot: UIControl {
     var chipID = ""
     var index = 0
     var role = ChipRole.alternative
-    var collapsing = false
+    var onTap: ((Int) -> Void)?
+    var onHide: ((Int) -> Void)?
     let title = UILabel()
-    private let press = UIView()
+    private let fill = UIView()
+    private var restingTitle = ""
+    private var restingColor = KeyboardChrome.troughText
+    private var pressTask: Task<Void, Never>?
+    private var holding = false
+    private var hiding = false
+    private let impact = UIImpactFeedbackGenerator(style: .light)
+
+    var isHolding: Bool { holding || hiding }
+    var isHiding: Bool { hiding }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 12
         layer.cornerCurve = .continuous
         clipsToBounds = true
-        press.backgroundColor = UIColor.black.withAlphaComponent(0.18)
-        press.isUserInteractionEnabled = false
-        press.alpha = 0
+        fill.backgroundColor = KeyboardChrome.seal
+        fill.isUserInteractionEnabled = false
+        fill.alpha = 0
         title.textAlignment = .center
         title.adjustsFontForContentSizeCategory = false
         title.adjustsFontSizeToFitWidth = true
         title.minimumScaleFactor = 0.7
         title.lineBreakMode = .byTruncatingTail
-        addSubview(press)
+        addSubview(fill)
         addSubview(title)
         isAccessibilityElement = true
         accessibilityTraits = .button
-        let hold = UILongPressGestureRecognizer(target: self, action: #selector(held(_:)))
-        hold.minimumPressDuration = 0.45
-        addGestureRecognizer(hold)
     }
 
-    var onLongPress: ((Int) -> Void)?
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("Chip slots are created in code")
+    }
 
-    @objc private func held(_ gesture: UILongPressGestureRecognizer) {
-        guard gesture.state == .began, !collapsing else { return }
-        collapsing = true
+    func showWord(_ word: String) {
+        restingTitle = word
+        guard !isHolding else { return }
+        title.text = word
+    }
+
+    func applyTitleColor(_ color: UIColor) {
+        restingColor = color
+        guard !isHolding else { return }
+        title.textColor = color
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard !holding, !hiding else { return }
+        holding = true
+        impact.prepare()
+        if !UIAccessibility.isReduceMotionEnabled {
+            UIView.animate(
+                withDuration: 0.12,
+                delay: 0,
+                options: [.curveEaseOut, .allowUserInteraction, .beginFromCurrentState]
+            ) {
+                self.transform = CGAffineTransform(scaleX: 0.96, y: 0.96)
+            }
+        }
+        guard role != .context else { return }
+        pressTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(200))
+            guard !Task.isCancelled, self.holding, !self.hiding else { return }
+            self.revealHide()
+            try? await Task.sleep(for: .milliseconds(250))
+            guard !Task.isCancelled, self.holding, !self.hiding else { return }
+            self.commitHide()
+        }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard holding, !hiding else { return }
+        let inside = touches.contains { bounds.contains($0.location(in: self)) }
+        if !inside {
+            endPress(performTap: false)
+        }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let inside = touches.contains { bounds.contains($0.location(in: self)) }
+        endPress(performTap: inside)
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        endPress(performTap: false)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        fill.frame = bounds
+        title.frame = bounds.insetBy(dx: 10, dy: 4)
+    }
+
+    private func revealHide() {
+        title.text = "Hide"
+        accessibilityLabel = "Hide"
+        title.textColor = KeyboardChrome.ink
+        guard !UIAccessibility.isReduceMotionEnabled else { return }
+        UIView.animate(
+            withDuration: 0.18,
+            delay: 0,
+            options: [.curveEaseOut, .allowUserInteraction, .beginFromCurrentState]
+        ) {
+            self.fill.alpha = 1
+        }
+    }
+
+    private func commitHide() {
+        hiding = true
+        holding = false
+        title.text = "Hidden"
+        accessibilityLabel = "Hidden"
+        impact.impactOccurred()
         let index = self.index
-        let finish = { self.onLongPress?(index) }
+        let finish = { self.onHide?(index) }
         guard !UIAccessibility.isReduceMotionEnabled else {
-            finish()
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(120))
+                finish()
+            }
             return
         }
         UIView.animate(withDuration: 0.16, delay: 0, options: [.curveEaseIn, .beginFromCurrentState]) {
@@ -242,20 +329,29 @@ private final class ChipSlot: UIControl {
         }
     }
 
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("Chip slots are created in code")
-    }
-
-    override var isHighlighted: Bool {
-        didSet {
-            press.alpha = isHighlighted ? 1 : 0
+    private func endPress(performTap: Bool) {
+        guard !hiding else { return }
+        pressTask?.cancel()
+        pressTask = nil
+        let shouldTap = performTap && holding && role != .context
+        holding = false
+        title.text = restingTitle
+        accessibilityLabel = restingTitle
+        title.textColor = restingColor
+        fill.alpha = 0
+        if UIAccessibility.isReduceMotionEnabled {
+            transform = .identity
+        } else {
+            UIView.animate(
+                withDuration: 0.12,
+                delay: 0,
+                options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction]
+            ) {
+                self.transform = .identity
+            }
         }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        press.frame = bounds
-        title.frame = bounds.insetBy(dx: 10, dy: 4)
+        if shouldTap {
+            onTap?(index)
+        }
     }
 }

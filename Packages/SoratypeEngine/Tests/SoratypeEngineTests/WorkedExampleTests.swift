@@ -79,7 +79,7 @@ struct WorkedExampleTests {
         script.move("y", finger: 2)
         let planted = script.engine.observations.filter { $0.letter == LetterByte.byte("s") }
         #expect(planted.count == 1)
-        #expect(planted.first?.kind == .pin)
+        #expect(planted.first?.kind == .anchor)
         script.up(2)
         script.elapseGrace()
         #expect(script.text == "stay ")
@@ -110,6 +110,45 @@ struct WorkedExampleTests {
         #expect(script.text.hasSuffix(" ") == false)
         script.space()
         #expect(script.text == "stay ")
+    }
+
+    @Test func aPlantedFingerOpensTheSwipeOnlyWhenItTravels() {
+        var script = Script()
+        script.down("c", finger: 1)
+        script.swipe("nt", finger: 2)
+        #expect(script.engine.phase == .contact)
+        #expect(script.engine.observations.contains { $0.letter == LetterByte.byte("n") })
+        script.move("a", finger: 1)
+        #expect(script.engine.phase == .swipeOpen)
+        script.up(1)
+        script.elapseGrace()
+        #expect(script.text.hasSuffix(" "))
+        #expect(script.text.split(separator: " ").count == 1)
+    }
+
+    @Test func aShortPlantBecomesAnAnchorWhenTheOtherThumbTaps() {
+        var script = Script()
+        script.down("c", finger: 1)
+        script.wait(40)
+        script.tap("n", finger: 2)
+        script.move("a", finger: 1)
+        let planted = script.engine.observations.filter { $0.letter == LetterByte.byte("c") }
+        #expect(planted.count == 1)
+        #expect(planted.first?.kind == .anchor)
+        #expect(AimedSpelling.text(from: script.engine.observations).contains("c"))
+    }
+
+    @Test func aPlantThatNeverTravelsStaysOpenAfterTheOtherThumbSwipes() {
+        var script = Script()
+        script.down("c", finger: 1)
+        script.swipe("nt", finger: 2)
+        script.up(1)
+        #expect(script.engine.phase == .tapOpen)
+        #expect(script.text.contains("c"))
+        #expect(script.text.hasSuffix(" ") == false)
+        script.space()
+        #expect(script.text.hasSuffix(" "))
+        #expect(script.text.split(separator: " ").count == 1)
     }
 
     @Test func quitMixesATapASwipeAndATap() {

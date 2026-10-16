@@ -35,6 +35,8 @@ public struct KeyboardEngine: Sendable {
     private var shift = ShiftState.off
     private var lastShiftTap = 0
     private var verbatim = false
+    /// The finger that opened this word. Only its travel latches swipe-open.
+    private var opener: FingerID?
     private var repeatUnit: RepeatUnit?
     private var suppressLiftDelete = false
     private var scrubUndo: [Character] = []
@@ -161,7 +163,11 @@ public struct KeyboardEngine: Sendable {
         }
         let published: [Observation]
         if key.kind.isStrokeEligible {
+            let opensWord = phase == .idle
             resolveGrace(at: sample.time.milliseconds)
+            if opensWord || phase == .idle {
+                opener = sample.finger
+            }
             let thumb = ThumbIdentity.thumb(at: sample.point, midline: layout.midline)
             let othersDown = segmenter.activeCount > 0
             published = segmenter.down(
@@ -333,7 +339,7 @@ public struct KeyboardEngine: Sendable {
         }
         composer.integrate(adjusted, draft: &draft, chunks: &chunks)
         noteDraft()
-        if phase == .contact, draft.contains(where: { $0.stroke != 0 }) {
+        if phase == .contact, let opener, segmenter.hasStroked(opener) {
             phase = .swipeOpen
         }
         if shift == .once {
